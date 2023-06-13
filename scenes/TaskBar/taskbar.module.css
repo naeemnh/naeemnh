@@ -1,0 +1,42 @@
+.taskbar_wrapper {
+  /* border-top: 1px solid rgb(var(--callout-border-rgb)); */
+  box-shadow: 0px -1px 5px 0px rgba(var(--foreground-rgb), 0.15);
+  -webkit-box-shadow: 0px -1px 5px 0px rgba(var(--foreground-rgb), 0.15);
+  -moz-box-shadow: 0px -1px 5px 0px rgba(var(--foreground-rgb), 0.15);
+  display: flex;
+  width: 100%;
+  padding-left: 2rem;
+  /* padding-bottom: .4rem; */
+  max-height: 40px;
+  align-items: flex-end;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.taskbar_socials {
+  background-color: rgb(var(--foreground-rgb));
+  padding: .75rem;
+  margin-bottom: .4rem;
+  /* border: 1px solid rgb(var(--callout-border-rgb)); */
+  box-shadow: 0px -1px 5px 0px rgba(var(--foreground-rgb), 0.15);
+  -webkit-box-shadow: 0px -1px 5px 0px rgba(var(--foreground-rgb), 0.15);
+  -moz-box-shadow: 0px -1px 5px 0px rgba(var(--foreground-rgb), 0.15);
+  background-color: rgb(var(--background-start-rgb));
+  border-radius: 100%;
+  transition: background-color .3s;
+}
+
+.taskbar_socials:hover {
+  background-color: rgb(var(--background-end-rgb));
+}
+
+@media (max-width: 450px) {
+  .taskbar_wrapper {
+    box-shadow: none;
+    padding-left: 0;
+  }
+
+  .taskbar_socials {
+    margin: 0 auto .4rem;
+  }
+}

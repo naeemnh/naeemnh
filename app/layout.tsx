@@ -1,7 +1,15 @@
+'use client';
+
+import CanvasAnimation from '@/scenes/CanvasAnimation';
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, Montserrat, Poppins } from 'next/font/google'
+import DesktopMenu from '@/scenes/DesktopMenu';
+import TaskBar from '@/scenes/TaskBar';
+import { WindowProvider } from '@/context/WindowContext';
 
 const inter = Inter({ subsets: ['latin'] })
+const montserrat = Montserrat({ subsets: ['latin'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400'] });
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,7 +23,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={montserrat.className}>
+        <CanvasAnimation />
+        <WindowProvider>
+          {children}
+        </WindowProvider>
+        {/* <TaskBar /> */}
+      </body>
     </html>
   )
 }

@@ -1,0 +1,44 @@
+.desktopIcon_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-overflow: ellipsis;
+}
+
+.desktopIcon_wrapper:hover {
+  cursor: pointer;
+}
+
+.desktopIcon_label {
+  font-weight: 600;
+  font-size: 12px;
+  display: block;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.desktopIcon_wrapper:hover .desktopIcon_label {
+  opacity: 1;
+}
+
+@media (max-width: 450px) {
+  .desktopIcon_label {
+    width: 60px;
+    height: 19px;
+    overflow: hidden;
+  }
+
+  .desktopIcon_wrapper:hover .desktopIcon_label {
+    white-space: inherit;
+    word-wrap: break-word;
+    overflow: visible;
+  }
+
+}
