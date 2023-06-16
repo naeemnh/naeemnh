@@ -7,7 +7,8 @@
   height: 80%;
   margin: auto;
   overflow: hidden;
-  position: fixed;
+  position: absolute;
+  transition: all .3s;
 }
 
 .window_topbar {
@@ -17,7 +18,8 @@
 }
 
 .window_topbar>p {
-  padding: .5rem
+  padding: .5rem;
+  cursor: default;
 }
 
 .window_options {
@@ -57,9 +59,25 @@
   .draggable {
     flex: 1 1 25%;
   }
+}
 
+@media (max-width: 450px) {
   .window {
     width: 100%;
-    height: 100%;
+    top: 0;
+    height: calc(100% - 80px);
+    border: none
+  }
+
+  .window_topbar {
+    border-bottom: 1px solid rgb(var(--callout-border-rgb))
+  }
+
+  .draggable {
+    cursor: default;
+  }
+
+  .draggable:active {
+    cursor: default;
   }
 }

@@ -4,9 +4,11 @@
   flex-wrap: wrap;
   gap: 1rem;
   padding: 1.25rem 2rem .25rem;
+  max-width: 346px;
   background-color: rgba(var(--background-end-rgb), 0.75);
   border-radius: 50px;
   position: relative;
+  transition: all .3s
 }
 
 .otherThings {
@@ -24,11 +26,14 @@
 
 @media (max-width: 450px) {
   .desktopMenu_wrapper {
-    padding: 3rem;
-    flex-direction: row;
-    gap: 3rem 6rem;
-    align-items: flex-start;
-    justify-content: flex-start;
-    /* height: 80vh; */
+    max-width: 450px;
+    width: 100%;
+    justify-content: space-around;
+    border-radius: 0;
+  }
+
+  .otherThings {
+    right: 0;
+    width: 100%;
   }
 }

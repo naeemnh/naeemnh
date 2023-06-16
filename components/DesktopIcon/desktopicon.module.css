@@ -38,7 +38,6 @@
   .desktopIcon_wrapper:hover .desktopIcon_label {
     white-space: inherit;
     word-wrap: break-word;
-    overflow: visible;
+    opacity: 0
   }
-
 }

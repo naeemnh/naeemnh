@@ -11,6 +11,9 @@ import { WindowProps } from '@/types/props.interface';
 const Window = ({ children, title, open, position, defaultPosition, ...props }: WindowProps) => {
   const { windows, focusWindow, updateWindowPosition, setWindows } = useWindow();
   const [currentBounds, setCurrentBounds] = useState<ControlPosition>(position || defaultPosition)
+  const mediaQuery = '(max-width: 450px)';
+  const mediaQueryList = typeof window != 'undefined' && window.matchMedia(mediaQuery);
+  const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false)
   const windowRef = useRef<any>(null)
 
   function closeWindow(e: MouseEvent) {
@@ -28,8 +31,16 @@ const Window = ({ children, title, open, position, defaultPosition, ...props }: 
     setCurrentBounds(position || defaultPosition)
   }, [windows])
 
+  useEffect(() => {
+    mediaQueryList && mediaQueryList.addEventListener('change', (e) => {
+      e.matches ? setIsSmallScreen(true) : setIsSmallScreen(false)
+    })
+    console.log(isSmallScreen)
+  })
+
   const handleFocus = () => {
     if (windows.length > 1) focusWindow(title);
+    if (isSmallScreen) return false;
   }
 
   const handlePosition = (e: DraggableEvent, ui: DraggableData) => {
@@ -42,7 +53,7 @@ const Window = ({ children, title, open, position, defaultPosition, ...props }: 
 
   return (
     <>
-      <Draggable defaultPosition={defaultPosition} position={position} onStart={handleFocus} handle='div.draggable' onDrag={handlePosition} onStop={handleWindowPosition}>
+      <Draggable defaultPosition={defaultPosition} position={isSmallScreen ? defaultPosition : position} onStart={handleFocus} handle='div.draggable' onDrag={handlePosition} onStop={handleWindowPosition}>
         <div className={styles.window} ref={windowRef} onClick={handleFocus} style={{ zIndex: props.zIndex }}>
           <div className={styles.window_topbar}>
             <p>
