@@ -25,6 +25,9 @@ export default function CanvasAnimation(): React.JSX.Element {
       setWindowWidth(window.innerWidth);
     };
 
+    /**
+     * listen for theme change for animation 
+     */
     const handleThemeChange = ({ matches }: MediaQueryListEvent): void => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -32,7 +35,13 @@ export default function CanvasAnimation(): React.JSX.Element {
       setIsDark(matches);
     };
 
-    const animateCanvas = (w: number, h: number) => {
+    /**
+     * initialize canvas animation
+     * @param w width of canvas
+     * @param h height of canvas
+     * @returns {void}
+     */
+    const animateCanvas = (w: number, h: number): void => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       canvas.width = w;
