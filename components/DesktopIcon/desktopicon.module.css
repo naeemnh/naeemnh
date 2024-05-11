@@ -33,11 +33,19 @@
     width: 60px;
     height: 19px;
     overflow: hidden;
+    opacity: 1;
+    text-overflow: initial;
+    overflow: visible;
+    white-space: inherit;
   }
 
-  .desktopIcon_wrapper:hover .desktopIcon_label {
+  .desktopIcon_wrapper {
+    overflow: visible;
+  }
+
+  /* .desktopIcon_wrapper:hover .desktopIcon_label {
     white-space: inherit;
     word-wrap: break-word;
     opacity: 0
-  }
+  } */
 }
