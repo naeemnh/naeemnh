@@ -17,7 +17,8 @@ export default function Home() {
             <div className={styles.about_me}>
 
               <h1>Hello, My name is Naeem Hussain</h1>
-              <p>Fullstack | Wordpress Developer</p>
+              {/* <p>Frontend | Wordpress Developer</p> */}
+              <p>I am a fullstack developer, crafting digital solutions with a passion for innovation and a commitment to excellence.</p>
             </div>
           </>
       }
