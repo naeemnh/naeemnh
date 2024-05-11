@@ -8,7 +8,6 @@
   margin: auto;
   overflow: hidden;
   position: absolute;
-  transition: all .3s;
 }
 
 .window_topbar {
@@ -17,8 +16,8 @@
   border-bottom: 1px solid rgb(var(--card-border-rgb));
 }
 
-.window_topbar>p {
-  padding: .5rem;
+.window_topbar > p {
+  padding: 0.5rem;
   cursor: default;
 }
 
@@ -26,13 +25,13 @@
   display: flex;
 }
 
-.window_options>span {
-  padding: .5rem;
+.window_options > span {
+  padding: 0.5rem;
   text-align: center;
 }
 
-.window_options>span:hover {
-  background-color: rgba(var(--card-rgb), .25);
+.window_options > span:hover {
+  background-color: rgba(var(--card-rgb), 0.25);
   cursor: pointer;
 }
 
@@ -45,8 +44,12 @@
   cursor: grabbing;
 }
 
-.window[data-focus=10] {
+.window[data-focus="10"] {
   z-index: 10;
+}
+
+.window.doDisplay {
+  display: none;
 }
 
 @media (max-width: 1253px) {
@@ -66,11 +69,11 @@
     width: 100%;
     top: 0;
     height: calc(100% - 80px);
-    border: none
+    border: none;
   }
 
   .window_topbar {
-    border-bottom: 1px solid rgb(var(--callout-border-rgb))
+    border-bottom: 1px solid rgb(var(--callout-border-rgb));
   }
 
   .draggable {
