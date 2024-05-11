@@ -35,7 +35,6 @@ const Window = ({ children, title, open, position, defaultPosition, ...props }: 
     mediaQueryList && mediaQueryList.addEventListener('change', (e) => {
       e.matches ? setIsSmallScreen(true) : setIsSmallScreen(false)
     })
-    console.log(isSmallScreen)
   })
 
   const handleFocus = () => {
@@ -54,7 +53,7 @@ const Window = ({ children, title, open, position, defaultPosition, ...props }: 
   return (
     <>
       <Draggable defaultPosition={defaultPosition} position={isSmallScreen ? defaultPosition : position} onStart={handleFocus} handle='div.draggable' onDrag={handlePosition} onStop={handleWindowPosition}>
-        <div className={styles.window} ref={windowRef} onClick={handleFocus} style={{ zIndex: props.zIndex }}>
+        <div className={styles.window} ref={windowRef} onClick={handleFocus} style={{ zIndex: props.zIndex, display: (isSmallScreen && (props.zIndex < windows.length + 9)) ? 'none' : 'block' }}>
           <div className={styles.window_topbar}>
             <p>
               ../{title}
