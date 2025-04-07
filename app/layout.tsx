@@ -1,35 +1,35 @@
-// 'use client';
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import "./globals.css";
 
-import CanvasAnimation from '@/scenes/CanvasAnimation';
-import './globals.css'
-import { Inter, Montserrat, Poppins } from 'next/font/google'
-import DesktopMenu from '@/scenes/DesktopMenu';
-import TaskBar from '@/scenes/TaskBar';
-import { WindowProvider } from '@/context/WindowContext';
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
-const inter = Inter({ subsets: ['latin'] })
-const montserrat = Montserrat({ subsets: ['latin'] });
-const poppins = Poppins({ subsets: ['latin'], weight: ['400'] });
-
-export const metadata = {
-  title: 'Naeem Hussain',
-  description: 'My Personal Website',
-}
+export const metadata: Metadata = {
+  title: "Naeem Hussain",
+  description: "Naeem Hussain | Software Developer",
+};
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
-        <CanvasAnimation />
-        <WindowProvider>
-          {children}
-        </WindowProvider>
-        {/* <TaskBar /> */}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
       </body>
     </html>
-  )
+  );
 }

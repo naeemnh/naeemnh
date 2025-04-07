@@ -1,28 +1,20 @@
 "use client";
 
-import styles from './page.module.css'
-import Window from '@/components/Window'
-import { useWindow } from '@/context/WindowContext'
-import DesktopMenu from '@/scenes/DesktopMenu';
+import { CanvasAnimation } from "@/components/organisms";
 
 export default function Home() {
-  const { windows } = useWindow()
   return (
-    <main className={styles.main}>
-      {
-        windows.length > 0 && windows.some(window => window.open === true) ?
-          (
-            windows.map((window, i) => <Window key={i} {...window} />)
-          ) : <>
-            <div className={styles.about_me}>
-
-              <h1>Hello, My name is Naeem Hussain</h1>
-              {/* <p>Frontend | Wordpress Developer</p> */}
-              <p>I am a fullstack developer, crafting digital solutions with a passion for innovation and a commitment to excellence.</p>
-            </div>
-          </>
-      }
-      <DesktopMenu />
-    </main>
-  )
+    <>
+      <CanvasAnimation />
+      <main className="w-full h-full min-h-[100vh] bg-black/5 flex flex-col justify-center items-center text-center gap-4 pl-2 pb-2">
+        <h1 className="text-foreground dark text-3xl lg:text-5xl">
+          Hello, My name is Naeem Hussain
+        </h1>
+        <p className="text-foreground dark italic lg:text-2xl max-w-[75%] lg:max-w-[700px]">
+          I am a full stack developer, crafting digital solutions with a passion
+          for innovation and a commitment to excellence.
+        </p>
+      </main>
+    </>
+  );
 }
