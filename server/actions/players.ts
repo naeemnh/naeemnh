@@ -36,7 +36,7 @@ async function createMany(data: { names: string[] }) {
 }
 
 export const playerActions = {
-  getPlayers: getAll,
+  getAll,
   create,
   createMany,
 };
