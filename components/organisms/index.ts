@@ -1,1 +1,1 @@
-export { default as CanvasAnimation } from "./CanvasAnimation";
+export { default as CanvasAnimation } from "./canvas-animation";
