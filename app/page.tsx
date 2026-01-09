@@ -1,20 +1,56 @@
 "use client";
 
-import { CanvasAnimation } from "@/components/organisms";
+import { Section } from "@/components/atoms";
+import { AboutSection, BlogsSection, ContactSection, Dock, Header, HeroSection, WorkSection } from "@/components/organisms";
+import { Env } from "@/config/env";
+import { scrollToSection } from "@/lib/utils";
 
 export default function Home() {
   return (
     <>
-      <CanvasAnimation />
-      <main className="w-full h-full min-h-[100vh] bg-black/5 flex flex-col justify-center items-center text-center gap-4 pl-2 pb-2">
-        <h1 className="text-foreground dark text-3xl lg:text-5xl">
-          Hello, My name is Naeem Hussain
-        </h1>
-        <p className="text-foreground dark italic lg:text-2xl max-w-[75%] lg:max-w-[700px]">
-          I am a full stack developer, crafting digital solutions with a passion
-          for innovation and a commitment to excellence.
-        </p>
-      </main>
+      <div className="min-h-screen bg-slate-50 font-sans">
+        {/* Wallpaper */}
+        {/* <div className="fixed inset-0 bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" /> */}
+
+        {/* Desktop Interface */}
+        <Header />
+
+        {/* Bottom Dock / Taskbar - Fixed */}
+        <Dock />
+
+        {/* </div> */}
+        {/* Main Content - Scrollable Sections */}
+        <main>
+          <Section id="home">
+            <HeroSection onNavigate={(sectionId) => scrollToSection(sectionId)} />
+          </Section>
+          {/* Portfolio Section */}
+          <Section id="work">
+            <WorkSection />
+          </Section>
+
+          {/* Blog Section */}
+          {Env.BLOGS_ENABLED && (
+            <Section id="blog">
+              <BlogsSection />
+            </Section>
+          )}
+
+          {/* About Section */}
+          <Section id="about">
+            <AboutSection />
+          </Section>
+
+          {/* Contact Section */}
+          <Section id="contact" className="pb-28 md:pb-36">
+            <div className="px-6 max-w-4xl mx-auto py-24">
+              <ContactSection />
+            </div>
+          </Section>
+        </main>
+      </div>
     </>
   );
 }
+
+// Contact Section Component
