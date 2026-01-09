@@ -1,6 +1,6 @@
 "use client";
 
-import { maxOrbit, random } from "@/lib";
+import { maxOrbit, random } from "@/lib/stars";
 
 export class Star {
   orbitRadius: number;
@@ -11,13 +11,7 @@ export class Star {
   speed: number;
   alpha: number;
 
-  constructor(
-    w: number,
-    h: number,
-    private count: number,
-    private stars: Star[],
-    private maxStars: number,
-  ) {
+  constructor(w: number, h: number, private count: number, private stars: Star[], private maxStars: number) {
     this.orbitRadius = random(maxOrbit(w, h * 1.45));
     this.radius = random(60, this.orbitRadius) / 12;
     this.orbitX = w / 2;
@@ -42,13 +36,7 @@ export class Star {
       this.alpha += 0.05;
     }
     ctx.globalAlpha = this.alpha;
-    ctx.drawImage(
-      canvas2,
-      x - this.radius / 2,
-      y - this.radius / 2,
-      this.radius,
-      this.radius,
-    );
+    ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
     this.timePassed += this.speed;
   }
 }
