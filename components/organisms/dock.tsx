@@ -3,7 +3,8 @@ import { gsap } from "gsap";
 import { BookOpen, Mail, Briefcase, User, Settings, HomeIcon } from "lucide-react";
 
 import { useIsDesktop } from "@/hooks";
-import { AppIcon } from "../atoms";
+import { Env } from "@/config/env";
+import { AppIcon } from "@/components/atoms";
 
 export const Dock = () => {
   const isDesktop = useIsDesktop();
@@ -85,7 +86,7 @@ export const Dock = () => {
       >
         <AppIcon name="" sectionId="home" icon={<HomeIcon className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
         <AppIcon name="" sectionId="work" icon={<Briefcase className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
-        <AppIcon name="" sectionId="blog" icon={<BookOpen className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
+        {Env.BLOGS_ENABLED && <AppIcon name="" sectionId="blog" icon={<BookOpen className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />}
         <AppIcon name="" sectionId="about" icon={<User className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
         <AppIcon name="" sectionId="contact" icon={<Mail className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
 
