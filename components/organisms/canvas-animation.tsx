@@ -130,5 +130,5 @@ export default function CanvasAnimation(): React.JSX.Element {
     };
   }, [animateCanvas, handleThemeChange, handleWindowResize, windowHeight, windowWidth, canvasRef, isDark]);
 
-  return <canvas ref={canvasRef} className="fixed -z-1"></canvas>;
+  return <canvas ref={canvasRef} className="fixed -z-[1]"></canvas>;
 }
