@@ -130,5 +130,7 @@ export default function CanvasAnimation(): React.JSX.Element {
     };
   }, [animateCanvas, handleThemeChange, handleWindowResize, windowHeight, windowWidth, canvasRef, isDark]);
 
+  // Note: -z-[1] is correct syntax for Tailwind v4 arbitrary values
+  // The linter warning suggesting -z-1 is incorrect for v4
   return <canvas ref={canvasRef} className="fixed -z-[1]"></canvas>;
 }
