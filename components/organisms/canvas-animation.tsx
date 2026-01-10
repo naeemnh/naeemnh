@@ -9,6 +9,7 @@ export default function CanvasAnimation(): React.JSX.Element {
   const [windowHeight, setWindowHeight] = useState<number>(typeof window != "undefined" ? window.innerHeight : 0);
   const [isDark, setIsDark] = useState<boolean>(typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const animationFrameRef = useRef<number | null>(null);
+  const mediaQueryRef = useRef<MediaQueryList | null>(null);
   /**
    * Window Resize Hook
    * @returns {void} new height and width of window
@@ -105,9 +106,13 @@ export default function CanvasAnimation(): React.JSX.Element {
   );
 
   useEffect(() => {
-    if (typeof window !== "undefined") window.addEventListener("resize", handleWindowResize);
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", handleWindowResize);
 
-    if (typeof window !== "undefined") window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", handleThemeChange);
+      // Store media query list to remove listener later
+      mediaQueryRef.current = window.matchMedia("(prefers-color-scheme: dark)");
+      mediaQueryRef.current.addEventListener("change", handleThemeChange);
+    }
 
     animateCanvas(windowWidth | 0, windowHeight);
 
@@ -115,7 +120,13 @@ export default function CanvasAnimation(): React.JSX.Element {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      window.removeEventListener("resize", handleWindowResize);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", handleWindowResize);
+        // Remove media query listener to prevent memory leak
+        if (mediaQueryRef.current) {
+          mediaQueryRef.current.removeEventListener("change", handleThemeChange);
+        }
+      }
     };
   }, [animateCanvas, handleThemeChange, handleWindowResize, windowHeight, windowWidth, canvasRef, isDark]);
 
