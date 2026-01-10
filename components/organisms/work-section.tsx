@@ -40,7 +40,7 @@ const baseProjects: TProject[] = [
     link: "https://sawatechnologies.com",
   },
   {
-    id: 5,
+    id: 4,
     title: "Celebration Event Management",
     description: "Celebration Event Management is a platform for managing events and their related activities.",
     techStack: ["WordPress", "Custom Theme", "PHP", "MySQL"],
