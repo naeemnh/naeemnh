@@ -5,6 +5,44 @@ import { Env } from "@/config/env";
 const resend = new Resend(Env.RESEND_API_KEY);
 
 /**
+ * Escapes HTML special characters to prevent XSS/HTML injection attacks
+ */
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return text.replace(/[&<>"']/g, (char) => map[char]);
+}
+
+/**
+ * Escapes HTML and converts newlines to <br> tags for message content
+ */
+function escapeHtmlWithLineBreaks(text: string): string {
+  return escapeHtml(text).replace(/\n/g, "<br>");
+}
+
+/**
+ * Sanitizes email subject to prevent header injection attacks
+ * Removes newlines, carriage returns, and other control characters
+ */
+function sanitizeEmailSubject(text: string): string {
+  // Remove newlines, carriage returns, and other control characters that could be used for header injection
+  return text.replace(/[\r\n\t\0\v\f]/g, "").trim();
+}
+
+/**
+ * URL-encodes email for use in mailto links
+ * This is a safety measure, though the email is already validated
+ */
+function encodeEmailForMailto(email: string): string {
+  return encodeURIComponent(email);
+}
+
+/**
  * Creates an HTML email template for contact form notifications
  */
 function createEmailTemplate(name: string, email: string, subject: string, message: string): string {
@@ -28,29 +66,29 @@ function createEmailTemplate(name: string, email: string, subject: string, messa
         <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; border: 1px solid #e9ecef; border-top: none;">
           <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <h2 style="margin-top: 0; color: #667eea; font-size: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
-              ${subject}
+              ${escapeHtml(subject)}
             </h2>
           </div>
 
           <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <p style="margin: 0 0 15px 0;">
               <strong style="color: #667eea;">From:</strong><br>
-              <span style="color: #333;">${name}</span><br>
-              <a href="mailto:${email}" style="color: #667eea; text-decoration: none;">${email}</a>
+              <span style="color: #333;">${escapeHtml(name)}</span><br>
+              <a href="mailto:${encodeEmailForMailto(email)}" style="color: #667eea; text-decoration: none;">${escapeHtml(email)}</a>
             </p>
           </div>
 
           <div style="background: white; padding: 20px; border-radius: 6px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <strong style="color: #667eea; display: block; margin-bottom: 10px;">Message:</strong>
             <div style="color: #333; white-space: pre-wrap; line-height: 1.8;">
-              ${message.replace(/\n/g, "<br>")}
+              ${escapeHtmlWithLineBreaks(message)}
             </div>
           </div>
 
           <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; text-align: center; color: #6c757d; font-size: 12px;">
             <p style="margin: 0;">Received on ${timestamp}</p>
             <p style="margin: 5px 0 0 0;">
-              Reply directly to this email to respond to ${name}
+              Reply directly to this email to respond to ${escapeHtml(name)}
             </p>
           </div>
         </div>
@@ -90,7 +128,7 @@ export async function POST(request: Request) {
       from: senderEmail,
       to: recipientEmail,
       replyTo: email, // Set reply-to to user's email for easy replies
-      subject: `Contact Form: ${subject}`,
+      subject: `Contact Form: ${sanitizeEmailSubject(subject)}`,
       html: createEmailTemplate(name, email, subject, message),
     });
 
