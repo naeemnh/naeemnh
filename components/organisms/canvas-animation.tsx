@@ -5,17 +5,11 @@ import { Star } from "@/types";
 
 export default function CanvasAnimation(): React.JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [windowWidth, setWindowWidth] = useState<number>(
-    typeof window != "undefined" ? window.innerWidth : 0,
-  );
-  const [windowHeight, setWindowHeight] = useState<number>(
-    typeof window != "undefined" ? window.innerHeight : 0,
-  );
-  const [isDark, setIsDark] = useState<boolean>(
-    typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches,
-  );
+  const [windowWidth, setWindowWidth] = useState<number>(typeof window != "undefined" ? window.innerWidth : 0);
+  const [windowHeight, setWindowHeight] = useState<number>(typeof window != "undefined" ? window.innerHeight : 0);
+  const [isDark, setIsDark] = useState<boolean>(typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const animationFrameRef = useRef<number | null>(null);
+  const mediaQueryRef = useRef<MediaQueryList | null>(null);
   /**
    * Window Resize Hook
    * @returns {void} new height and width of window
@@ -31,15 +25,12 @@ export default function CanvasAnimation(): React.JSX.Element {
   /**
    * Listen for theme change for animation
    */
-  const handleThemeChange = useCallback(
-    ({ matches }: MediaQueryListEvent): void => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      setIsDark(matches);
-    },
-    [],
-  );
+  const handleThemeChange = useCallback(({ matches }: MediaQueryListEvent): void => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    setIsDark(matches);
+  }, []);
 
   /**
    * Initialize canvas animation
@@ -75,14 +66,7 @@ export default function CanvasAnimation(): React.JSX.Element {
       canvas2.width = 100;
       canvas2.height = 100;
       const half = canvas2.width / 2;
-      const gradient2 = ctx2!.createRadialGradient(
-        half,
-        half,
-        0,
-        half,
-        half,
-        half,
-      );
+      const gradient2 = ctx2!.createRadialGradient(half, half, 0, half, half, half);
       colorStops.forEach(({ offset, color }) => {
         gradient2.addColorStop(offset, color);
       });
@@ -122,13 +106,13 @@ export default function CanvasAnimation(): React.JSX.Element {
   );
 
   useEffect(() => {
-    if (typeof window !== "undefined")
+    if (typeof window !== "undefined") {
       window.addEventListener("resize", handleWindowResize);
 
-    if (typeof window !== "undefined")
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", handleThemeChange);
+      // Store media query list to remove listener later
+      mediaQueryRef.current = window.matchMedia("(prefers-color-scheme: dark)");
+      mediaQueryRef.current.addEventListener("change", handleThemeChange);
+    }
 
     animateCanvas(windowWidth | 0, windowHeight);
 
@@ -136,17 +120,17 @@ export default function CanvasAnimation(): React.JSX.Element {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      window.removeEventListener("resize", handleWindowResize);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", handleWindowResize);
+        // Remove media query listener to prevent memory leak
+        if (mediaQueryRef.current) {
+          mediaQueryRef.current.removeEventListener("change", handleThemeChange);
+        }
+      }
     };
-  }, [
-    animateCanvas,
-    handleThemeChange,
-    handleWindowResize,
-    windowHeight,
-    windowWidth,
-    canvasRef,
-    isDark,
-  ]);
+  }, [animateCanvas, handleThemeChange, handleWindowResize, windowHeight, windowWidth, canvasRef, isDark]);
 
+  // Note: -z-[1] is correct syntax for Tailwind v4 arbitrary values
+  // The linter warning suggesting -z-1 is incorrect for v4
   return <canvas ref={canvasRef} className="fixed -z-[1]"></canvas>;
 }
