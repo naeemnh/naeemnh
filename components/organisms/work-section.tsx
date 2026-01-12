@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { WorkCard } from "@/components/molecules";
 import { fetchMultipleOpenGraphData } from "@/lib/og-utils";
 import { TProject } from "@/types";
+import { ContentCard } from "../atoms";
 
 // TODO: Placeholder data - replace with actual projects
 const baseProjects: TProject[] = [
@@ -92,7 +93,7 @@ export const WorkSection = () => {
 
   return (
     <div className="px-6 max-w-5xl mx-auto py-24">
-      <div className="space-y-8">
+      <ContentCard className="space-y-8">
         <div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">My Work</h2>
           <p className="text-gray-600 dark:text-gray-400">Things I&apos;ve built that I&apos;m not embarrassed to show you</p>
@@ -117,7 +118,7 @@ export const WorkSection = () => {
             <p>Projects coming soon...</p>
           </div>
         )}
-      </div>
+      </ContentCard>
     </div>
   );
 };

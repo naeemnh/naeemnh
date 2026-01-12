@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Star } from "@/types";
 
-export default function CanvasAnimation(): React.JSX.Element {
+export const CanvasAnimation = (): React.JSX.Element => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [windowWidth, setWindowWidth] = useState<number>(typeof window != "undefined" ? window.innerWidth : 0);
   const [windowHeight, setWindowHeight] = useState<number>(typeof window != "undefined" ? window.innerHeight : 0);
@@ -132,5 +132,5 @@ export default function CanvasAnimation(): React.JSX.Element {
 
   // Note: -z-[1] is correct syntax for Tailwind v4 arbitrary values
   // The linter warning suggesting -z-1 is incorrect for v4
-  return <canvas ref={canvasRef} className="fixed -z-[1]"></canvas>;
-}
+  return <canvas ref={canvasRef} className="h-full w-full fixed -z-[1]"></canvas>;
+};
