@@ -8,7 +8,7 @@ import { scrollToSection } from "@/lib/utils";
 export default function Home() {
   return (
     <>
-      <div className="h-screen w-screen font-sans">
+      <div className="h-screen font-sans">
         {/* Wallpaper */}
         {/* <div className="fixed inset-0 bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" /> */}
         <CanvasAnimation />
