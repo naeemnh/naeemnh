@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { LinkedinInIcon, GithubInvertocatIcon } from "../icons";
 import { Env } from "@/config/env";
+import { ContentCard } from "../atoms";
 
 export const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <ContentCard className="space-y-8">
       <div>
         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">Get In Touch</h2>
         <p className="text-gray-600 dark:text-gray-400">Want to build something together? Have an interesting problem? I read everything.</p>
@@ -170,6 +171,6 @@ export const ContactSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </ContentCard>
   );
 };
