@@ -1,6 +1,8 @@
+import { ContentCard } from "../atoms"
+
 export const HeroSection = ({ onNavigate }: { onNavigate: (sectionId: string) => void }) => (
   <div className="min-h-screen flex items-center px-6 max-w-4xl mx-auto pt-16">
-    <div className="space-y-6">
+    <ContentCard className="space-y-6">
       <p className="text-slate-500 text-lg">Hey, I&apos;m</p>
 
       <h1 className="text-5xl md:text-7xl font-bold text-slate-900 tracking-tight">Naeem Hussain</h1>
@@ -31,6 +33,6 @@ export const HeroSection = ({ onNavigate }: { onNavigate: (sectionId: string) =>
       <div className="pt-12 text-slate-400 text-sm animate-bounce cursor-pointer" onClick={() => onNavigate("work")}>
         ↓ Scroll to explore
       </div>
-    </div>
+    </ContentCard>
   </div>
 );

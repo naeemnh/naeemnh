@@ -9,7 +9,7 @@ interface HeaderProps {
 
 export const Header = ({ isCLI, setIsCLI }: HeaderProps) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-slate-50/80 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-slate-50/50 backdrop-blur-sm">
       {/* Top Bar / Menu Bar - Fixed */}
       <a
         href="#"

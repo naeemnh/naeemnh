@@ -1,5 +1,6 @@
 import { TBlogPost } from "@/types";
 import { BlogCard } from "../molecules";
+import { ContentCard } from "../atoms";
 
 // Placeholder data - replace with actual blog posts
 const blogPosts: TBlogPost[] = [
@@ -22,7 +23,7 @@ const blogPosts: TBlogPost[] = [
 export const BlogsSection = () => {
   return (
     <div className="px-6 max-w-3xl mx-auto py-24">
-      <div className="space-y-8">
+      <ContentCard className="space-y-8">
         <div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">Blog</h2>
           <p className="text-gray-600 dark:text-gray-400">Writing — mostly about code, occasionally about everything else</p>
@@ -39,7 +40,7 @@ export const BlogsSection = () => {
             <p>Blog posts coming soon...</p>
           </div>
         )}
-      </div>
+      </ContentCard>
     </div>
   );
 };
