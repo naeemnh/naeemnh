@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { WorkCard } from "@/components/molecules";
-import { fetchMultipleOpenGraphData } from "@/lib/og-utils";
+// import { fetchMultipleOpenGraphData } from "@/lib/og-utils";
 import { TProject } from "@/types";
 import { ContentCard } from "../atoms";
 
@@ -59,16 +59,16 @@ export const WorkSection = () => {
 
     const fetchOGData = async () => {
       try {
-        const urls = baseProjects.map((p) => p.link);
-        const ogDataArray = await fetchMultipleOpenGraphData(urls);
+        // const urls = baseProjects.map((p) => p.link);
+        // const ogDataArray = await fetchMultipleOpenGraphData(urls);
 
         if (!isMounted) return;
 
-        const enrichedProjects = baseProjects.map((project, index) => {
-          const ogData = ogDataArray[index];
+        const enrichedProjects = baseProjects.map((project) => {
+          // const ogData = ogDataArray[index];
           return {
             ...project,
-            ogData,
+            // ogData,
           };
         });
 
