@@ -18,16 +18,16 @@ export default function Home() {
         {/* Desktop Interface */}
         <Header isCLI={isCLI} setIsCLI={setIsCLI} />
 
-        {/* Bottom Dock / Taskbar - Fixed */}
-        <Dock />
+        {isCLI ? (
+          <div>CLI View</div>
+        ) : (
+          <>
+            {/* Bottom Dock / Taskbar - Fixed */}
+            <Dock />
 
-        {/* </div> */}
-        {/* Main Content - Scrollable Sections */}
-        <main>
-          {isCLI ? (
-            <div>CLI View</div>
-          ) : (
-            <>
+            {/* </div> */}
+            {/* Main Content - Scrollable Sections */}
+            <main>
               <Section id="home">
                 <HeroSection onNavigate={(sectionId) => scrollToSection(sectionId)} />
               </Section>
@@ -54,9 +54,9 @@ export default function Home() {
                   <ContactSection />
                 </div>
               </Section>
-            </>
-          )}
-        </main>
+            </main>
+          </>
+        )}
       </div>
     </>
   );
