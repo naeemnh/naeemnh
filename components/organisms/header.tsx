@@ -1,4 +1,4 @@
-import { InterfaceToggler } from "@/components/molecules";
+import { InterfaceModeButton } from "@/components/molecules";
 import { Env } from "@/config/env";
 import { scrollToSection } from "@/lib/utils";
 import { useInterfaceMode } from "@/providers";
@@ -19,8 +19,8 @@ export const Header = () => {
         Naeem Hussain
       </a>
 
-      {/* Version Toggle */}
-      {Env.CLI_ENABLED && <InterfaceToggler />}
+      {/* CLI Mode Button */}
+      {Env.CLI_ENABLED && !isCLI && <InterfaceModeButton mode="gui" />}
     </header>
   );
 };
