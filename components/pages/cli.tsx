@@ -19,18 +19,18 @@ interface CLIState {
 }
 
 type CLIAction =
-  | { type: "ADD_OUTPUT"; payload: OutputLine[] }
-  | { type: "CLEAR_OUTPUT" }
-  | { type: "ADD_COMMAND"; payload: string }
-  | { type: "SET_DIRECTORY"; payload: string }
-  | { type: "SET_PROCESSING"; payload: boolean };
+  | { type: "ADD_OUTPUT"; payload: OutputLine[]; }
+  | { type: "CLEAR_OUTPUT"; }
+  | { type: "ADD_COMMAND"; payload: string; }
+  | { type: "SET_DIRECTORY"; payload: string; }
+  | { type: "SET_PROCESSING"; payload: boolean; };
 
 function cliReducer(state: CLIState, action: CLIAction): CLIState {
   switch (action.type) {
     case "ADD_OUTPUT": {
       const newOutput = [...state.output, ...action.payload];
       // Limit to 1000 lines (performance optimization)
-      const limited = newOutput.length > 1000 
+      const limited = newOutput.length > 1000
         ? newOutput.slice(-1000)
         : newOutput;
       return { ...state, output: limited };
@@ -68,7 +68,7 @@ export const CLI = () => {
   useEffect(() => {
     if (!registryRef.current) {
       registryRef.current = initializeCommands(vfsRef.current);
-      
+
       // Add welcome message
       const welcomeLine: OutputLine = {
         id: `output-${outputIdCounter.current++}`,
@@ -93,7 +93,7 @@ export const CLI = () => {
     if (!input.trim()) return;
 
     const trimmed = input.trim();
-    
+
     // Add command to history
     dispatch({ type: "ADD_COMMAND", payload: trimmed });
 
@@ -102,7 +102,7 @@ export const CLI = () => {
 
     // Parse command
     const parsed = parseCommand(trimmed);
-    
+
     if (!parsed.command) {
       return;
     }
@@ -126,7 +126,7 @@ export const CLI = () => {
     }
 
     const command = registry.findByNameOrAlias(parsed.command);
-    
+
     if (!command) {
       addOutputLine(`Command not found: ${parsed.command}\nType 'help' to see available commands.`, "error");
       return;
@@ -134,7 +134,7 @@ export const CLI = () => {
 
     // Execute command
     dispatch({ type: "SET_PROCESSING", payload: true });
-    
+
     try {
       const context = {
         currentDirectory: state.currentDirectory,
@@ -147,6 +147,31 @@ export const CLI = () => {
       // Handle special command results
       if (result.exit) {
         setIsCLI(false);
+        return;
+      }
+
+      // Handle resume download - must be before other result handling
+      if (parsed.command === "resume" && parsed.args[0] === "download" && Env.RESUME_URL) {
+        // Extract URL from command output (which has the modified URL with "1")
+        let downloadUrl: string;
+        if (result.output && typeof result.output === "string") {
+          const urlMatch = result.output.match(/Downloading resume: (.+)/);
+          if (urlMatch) {
+            downloadUrl = urlMatch[1];
+          } else {
+            // Fallback: construct URL with "1" suffix
+            downloadUrl = Env.RESUME_URL.endsWith("0") || Env.RESUME_URL.endsWith("1")
+              ? Env.RESUME_URL.slice(0, -1) + "1"
+              : Env.RESUME_URL + "1";
+          }
+        } else {
+          // Fallback: construct URL with "1" suffix
+          downloadUrl = Env.RESUME_URL.endsWith("0") || Env.RESUME_URL.endsWith("1")
+            ? Env.RESUME_URL.slice(0, -1) + "1"
+            : Env.RESUME_URL + "1";
+        }
+        window.open(downloadUrl, "_blank", "noopener,noreferrer");
+        addOutputLine(`Downloading resume...`, "output");
         return;
       }
 
@@ -171,16 +196,13 @@ export const CLI = () => {
         if (urlMatch) {
           const url = urlMatch[1];
           window.open(url, "_blank", "noopener,noreferrer");
-          addOutputLine(`Opened: ${url}`, "output");
+          // Show user-friendly message for resume, otherwise show URL
+          const friendlyMessage = parsed.args[0]?.toLowerCase() === "resume"
+            ? "Opened resume"
+            : `Opened: ${url}`;
+          addOutputLine(friendlyMessage, "output");
           return;
         }
-      }
-
-      // Handle resume download
-      if (parsed.command === "resume" && parsed.args[0] === "download" && Env.RESUME_URL) {
-        window.open(Env.RESUME_URL, "_blank", "noopener,noreferrer");
-        addOutputLine(`Opening resume: ${Env.RESUME_URL}`, "output");
-        return;
       }
 
       // Handle github/linkedin commands - open URLs
