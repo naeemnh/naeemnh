@@ -1,12 +1,7 @@
 "use client";
 
 import { useReducer, useCallback, useEffect, useRef } from "react";
-import { TerminalWindow } from "@/components/cli/terminal-window";
-import { OutputLine, OutputLineType } from "@/components/cli/output-line";
-import { CommandRegistry } from "@/components/cli/command-registry";
-import { parseCommand } from "@/components/cli/command-parser";
-import { VirtualFileSystem } from "@/components/cli/virtual-fs";
-import { initializeCommands } from "@/components/cli/commands";
+import { TerminalWindow, OutputLine, OutputLineType, CommandRegistry, parseCommand, VirtualFileSystem, initializeCommands } from "@/components/features/cli";
 import { Env } from "@/config/env";
 import { SOCIAL_LINKS } from "@/constants/cli-data";
 import { useInterfaceMode } from "@/providers";
