@@ -108,11 +108,6 @@ export const CLI = () => {
     }
 
     // Handle special commands
-    if (parsed.command === "clear") {
-      dispatch({ type: "CLEAR_OUTPUT" });
-      return;
-    }
-
     if (parsed.command === "exit") {
       setIsCLI(false);
       return;
@@ -129,6 +124,12 @@ export const CLI = () => {
 
     if (!command) {
       addOutputLine(`Command not found: ${parsed.command}\nType 'help' to see available commands.`, "error");
+      return;
+    }
+
+    // Handle clear command (works for both 'clear' and 'cls' alias)
+    if (command.name === "clear") {
+      dispatch({ type: "CLEAR_OUTPUT" });
       return;
     }
 
