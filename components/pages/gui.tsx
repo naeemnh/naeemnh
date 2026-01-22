@@ -1,12 +1,15 @@
 import { Env } from "@/config/env";
 import { Section } from "@/components/atoms";
-import { AboutSection, BlogsSection, CanvasAnimation, ContactSection, Dock, HeroSection, WorkSection } from "@/components/organisms";
+import { AboutSection, BlogsSection, CanvasAnimation, ContactSection, Dock, Header, HeroSection, WorkSection } from "@/components/organisms";
 import { scrollToSection } from "@/lib/utils";
 
 export const GUI = () => {
   return (<>
     {/* Canvas Animation */}
     <CanvasAnimation />
+
+    {/* Header - Fixed */}
+    <Header />
 
     {/* Bottom Dock / Taskbar - Fixed */}
     <Dock />

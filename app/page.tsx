@@ -1,7 +1,6 @@
 "use client";
 
 import { useInterfaceMode } from "@/providers";
-import { Header } from "@/components/organisms";
 import { CLI, GUI } from "@/components/pages";
 
 export default function Home() {
@@ -14,7 +13,6 @@ export default function Home() {
           <CLI />
         ) : (
           <>
-            <Header />
             <GUI />
           </>
         )}
