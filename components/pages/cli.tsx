@@ -9,6 +9,7 @@ import { VirtualFileSystem } from "@/components/cli/virtual-fs";
 import { initializeCommands } from "@/components/cli/commands";
 import { Env } from "@/config/env";
 import { SOCIAL_LINKS } from "@/constants/cli-data";
+import { useInterfaceMode } from "@/providers";
 
 interface CLIState {
   output: OutputLine[];
@@ -50,11 +51,8 @@ function cliReducer(state: CLIState, action: CLIAction): CLIState {
   }
 }
 
-interface CLIProps {
-  setIsCLI?: (value: boolean) => void;
-}
-
-export const CLI = ({ setIsCLI }: CLIProps) => {
+export const CLI = () => {
+  const { setIsCLI } = useInterfaceMode();
   const vfsRef = useRef(new VirtualFileSystem());
   const registryRef = useRef<CommandRegistry | null>(null);
   const outputIdCounter = useRef(0);
@@ -116,9 +114,7 @@ export const CLI = ({ setIsCLI }: CLIProps) => {
     }
 
     if (parsed.command === "exit") {
-      if (setIsCLI) {
-        setIsCLI(false);
-      }
+      setIsCLI(false);
       return;
     }
 
@@ -150,9 +146,7 @@ export const CLI = ({ setIsCLI }: CLIProps) => {
 
       // Handle special command results
       if (result.exit) {
-        if (setIsCLI) {
-          setIsCLI(false);
-        }
+        setIsCLI(false);
         return;
       }
 
@@ -218,14 +212,18 @@ export const CLI = ({ setIsCLI }: CLIProps) => {
     }
   }, [state.currentDirectory, state.commandHistory, addOutputLine, setIsCLI]);
 
+  const handleExit = useCallback(() => {
+    setIsCLI(false);
+  }, [setIsCLI]);
+
   return (
-    <div className="h-screen pt-16">
+    <div className="h-screen">
       <TerminalWindow
         output={state.output}
         currentDirectory={state.currentDirectory}
         commandHistory={state.commandHistory}
         onCommand={handleCommand}
-        onExit={() => setIsCLI?.(false)}
+        onExit={handleExit}
       />
     </div>
   );
