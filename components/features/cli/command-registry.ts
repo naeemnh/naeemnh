@@ -7,7 +7,7 @@ export interface CLIContext {
 }
 
 export type CommandResult = {
-  output: string | React.ReactNode;
+  output?: string | React.ReactNode;
   error?: string;
   exit?: boolean;
 };
