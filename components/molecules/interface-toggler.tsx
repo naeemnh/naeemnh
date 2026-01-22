@@ -1,11 +1,9 @@
 import { cn } from "@/lib/utils";
+import { useInterfaceMode } from "@/providers";
 
-interface InterfaceTogglerProps {
-  isCLI: boolean;
-  setIsCLI: (value: boolean) => void;
-}
-
-export const InterfaceToggler = ({ isCLI, setIsCLI }: InterfaceTogglerProps) => {
+export const InterfaceToggler = () => {
+  const { isCLI, setIsCLI } = useInterfaceMode();
+  
   const handleToggle = () => {
     setIsCLI(!isCLI);
   };

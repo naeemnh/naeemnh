@@ -1,13 +1,10 @@
 import { InterfaceToggler } from "@/components/molecules";
 import { Env } from "@/config/env";
 import { scrollToSection } from "@/lib/utils";
+import { useInterfaceMode } from "@/providers";
 
-interface HeaderProps {
-  isCLI: boolean;
-  setIsCLI: (value: boolean) => void;
-}
-
-export const Header = ({ isCLI, setIsCLI }: HeaderProps) => {
+export const Header = () => {
+  const { isCLI } = useInterfaceMode();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-slate-50/50 backdrop-blur-sm">
       {/* Top Bar / Menu Bar - Fixed */}
@@ -23,7 +20,7 @@ export const Header = ({ isCLI, setIsCLI }: HeaderProps) => {
       </a>
 
       {/* Version Toggle */}
-      {Env.CLI_ENABLED && <InterfaceToggler isCLI={isCLI} setIsCLI={setIsCLI} />}
+      {Env.CLI_ENABLED && <InterfaceToggler />}
     </header>
   );
 };
