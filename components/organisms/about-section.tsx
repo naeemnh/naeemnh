@@ -64,11 +64,11 @@ export const AboutSection = () => {
     <div className="px-6 max-w-3xl mx-auto py-24">
       <ContentCard className="space-y-8">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">About Me</h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-foreground/80 mb-3">About Me</h2>
+          <p className="text-gray-600 dark:text-foreground/60">
             I&apos;m a full stack engineer who genuinely enjoys the whole stack — yes, even debugging CSS. hire.
           </p>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600 dark:text-foreground/60">
             I learn fast, ship faster, and care about writing code that the next developer (often future me) wont curse at. I&apos;m drawn to teams building
             something meaningful, where quality matters and &quot;it works on my machine&quot; isn&apos;t an acceptable answer.
           </p>
@@ -76,10 +76,10 @@ export const AboutSection = () => {
 
         {/* Skills */}
         <div>
-          <h2 className="mb-4 text-2xl font-semibold">Skills & Technologies</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-foreground">Skills & Technologies</h2>
           <div className="flex flex-wrap gap-3">
             {skills.map((skill) => (
-              <span key={skill} className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium dark:bg-gray-800">
+              <span key={skill} className="rounded-lg bg-gray-100 dark:bg-gray-800 px-4 py-2 text-sm font-medium text-slate-700 dark:text-foreground/80">
                 {skill}
               </span>
             ))}
@@ -88,19 +88,19 @@ export const AboutSection = () => {
 
         {/* Experience */}
         <div>
-          <h2 className="mb-4 text-2xl font-semibold">Experience</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-foreground">Experience</h2>
           <div className="space-y-6">
             {experience.map((exp, index) => (
               <div key={index} className="relative pl-8">
                 <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-blue-500" />
-                <div className="border-l-2 border-gray-200 pl-6 dark:border-gray-800">
-                  <h3 className="text-lg font-semibold">{exp.title}</h3>
+                <div className="border-l-2 border-gray-200 dark:border-gray-800 pl-6">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-foreground">{exp.title}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                     {exp.company} • {exp.period}
                   </p>
                   {exp.description && <p className="mt-2 text-gray-700 dark:text-gray-300">{exp.description}</p>}
                   {exp.points && exp.points.length > 0 && (
-                    <ul className="list-disc ml-4">
+                    <ul className="list-disc ml-4 text-gray-600 dark:text-gray-300">
                       {exp.points.map((p, i) => (
                         <li key={`${exp.company}-${index}-${i}`}>{p}</li>
                       ))}
