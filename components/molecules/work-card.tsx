@@ -8,7 +8,7 @@ type WorkCardProps = {
 
 export const WorkCard: FC<WorkCardProps> = ({ project }) => {
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-slate-300 hover:shadow-xl transition-all duration-300 cursor-pointer">
+    <div className="group bg-white dark:bg-background rounded-2xl overflow-hidden border border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600 hover:shadow-xl transition-all duration-300 cursor-pointer">
       <div
         className={cn("aspect-video bg-linear-to-br relative overflow-hidden", {
           "from-blue-500 to-indigo-600": project.id % 4 === 0,
@@ -32,16 +32,16 @@ export const WorkCard: FC<WorkCardProps> = ({ project }) => {
         ></div>
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{project.title}</h3>
-        <p className="text-slate-600 mb-4 leading-relaxed">{project.description}</p>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-foreground/80 mb-2 group-hover:text-blue-600 transition-colors">{project.title}</h3>
+        <p className="text-slate-600 dark:text-foreground/40 mb-4 leading-relaxed">{project.description}</p>
         <div className="flex flex-wrap gap-2 mb-4">
           {project.techStack.map((tech) => (
-            <span key={tech} className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-sm">
+            <span key={tech} className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-foreground/60 rounded-full text-sm border border-slate-200 dark:border-slate-700">
               {tech}
             </span>
           ))}
         </div>
-        <a href={project.link} className="inline-flex items-center gap-2 text-slate-900 font-medium group-hover:gap-3 transition-all">
+        <a href={project.link} className="inline-flex items-center gap-2 text-slate-900 dark:text-foreground/80 font-medium group-hover:gap-3 transition-all">
           View Project <span>→</span>
         </a>
       </div>
