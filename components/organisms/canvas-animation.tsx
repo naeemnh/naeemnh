@@ -2,14 +2,17 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Star } from "@/types";
+import { useAnimationPreferences } from "@/providers";
+import { useTheme } from "next-themes";
 
-export const CanvasAnimation = (): React.JSX.Element => {
+export const CanvasAnimation = (): React.JSX.Element | null => {
+  const { isAnimationEnabled } = useAnimationPreferences();
+  const { resolvedTheme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [windowWidth, setWindowWidth] = useState<number>(typeof window != "undefined" ? window.innerWidth : 0);
   const [windowHeight, setWindowHeight] = useState<number>(typeof window != "undefined" ? window.innerHeight : 0);
-  const [isDark, setIsDark] = useState<boolean>(typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   const animationFrameRef = useRef<number | null>(null);
-  const mediaQueryRef = useRef<MediaQueryList | null>(null);
+  const isDark = resolvedTheme === "dark";
   /**
    * Window Resize Hook
    * @returns {void} new height and width of window
@@ -20,16 +23,6 @@ export const CanvasAnimation = (): React.JSX.Element => {
     }
     setWindowHeight(window.innerHeight);
     setWindowWidth(window.innerWidth);
-  }, []);
-
-  /**
-   * Listen for theme change for animation
-   */
-  const handleThemeChange = useCallback(({ matches }: MediaQueryListEvent): void => {
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-    setIsDark(matches);
   }, []);
 
   /**
@@ -108,10 +101,6 @@ export const CanvasAnimation = (): React.JSX.Element => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("resize", handleWindowResize);
-
-      // Store media query list to remove listener later
-      mediaQueryRef.current = window.matchMedia("(prefers-color-scheme: dark)");
-      mediaQueryRef.current.addEventListener("change", handleThemeChange);
     }
 
     animateCanvas(windowWidth | 0, windowHeight);
@@ -122,13 +111,14 @@ export const CanvasAnimation = (): React.JSX.Element => {
       }
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", handleWindowResize);
-        // Remove media query listener to prevent memory leak
-        if (mediaQueryRef.current) {
-          mediaQueryRef.current.removeEventListener("change", handleThemeChange);
-        }
       }
     };
-  }, [animateCanvas, handleThemeChange, handleWindowResize, windowHeight, windowWidth, canvasRef, isDark]);
+  }, [animateCanvas, handleWindowResize, windowHeight, windowWidth]);
+
+  // Don't render if animation is disabled
+  if (!isAnimationEnabled) {
+    return null;
+  }
 
   // Note: -z-[1] is correct syntax for Tailwind v4 arbitrary values
   // The linter warning suggesting -z-1 is incorrect for v4
