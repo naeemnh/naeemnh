@@ -7,7 +7,7 @@ export const createCatCommand = (vfs: VirtualFileSystem): Command => ({
   aliases: ["view", "read", "show"],
   description: "Display content of a file/section",
   usage: "cat <file> or cat <section>",
-  handler: (args, context: CLIContext) => {
+  handler: async (args, context: CLIContext) => {
     if (args.length === 0) {
       return {
         error: "Usage: cat <file> or cat <section>",
@@ -23,7 +23,35 @@ export const createCatCommand = (vfs: VirtualFileSystem): Command => ({
       };
     }
 
-    // Handle different paths
+    // Handle file nodes - read their content
+    if (node.type === "file") {
+      if (node.content) {
+        if (typeof node.content === "string") {
+          return {
+            output: node.content,
+          };
+        } else {
+          // Handle async content
+          const content = await node.content();
+          return {
+            output: content,
+          };
+        }
+      } else {
+        return {
+          error: `File ${targetPath} has no content`,
+        };
+      }
+    }
+
+    // Handle executable files
+    if (node.type === "executable") {
+      return {
+        error: `${targetPath} is an executable file. Use './${node.name}' or 'run ${node.name}' to execute it.`,
+      };
+    }
+
+    // Fallback to legacy path handling for backward compatibility
     if (targetPath === "/about" || targetPath.endsWith("/about")) {
       return {
         output: ABOUT_TEXT,
@@ -59,7 +87,7 @@ export const createCatCommand = (vfs: VirtualFileSystem): Command => ({
 
     // Default: show path info
     return {
-      output: `Path: ${targetPath}\nType: ${node.type}`,
+      output: `Path: ${targetPath}\nType: ${node.type}\n\nThis is a directory. Use 'ls' to list its contents.`,
     };
   },
 });
