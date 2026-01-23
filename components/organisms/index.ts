@@ -5,4 +5,5 @@ export * from "./contact-section";
 export * from "./dock";
 export * from "./header";
 export * from "./home-section";
+export * from "./settings-panel";
 export * from "./work-section";

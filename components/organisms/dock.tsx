@@ -6,7 +6,11 @@ import { useIsDesktop } from "@/hooks";
 import { Env } from "@/config/env";
 import { AppIcon } from "@/components/atoms";
 
-export const Dock = () => {
+interface DockProps {
+  onSettingsClick?: () => void;
+}
+
+export const Dock = ({ onSettingsClick }: DockProps) => {
   const isDesktop = useIsDesktop();
   const dockContainerRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
@@ -92,7 +96,11 @@ export const Dock = () => {
 
         <div className="mx-2 h-8 w-px bg-gray-300 dark:bg-gray-600" />
 
-        <button className="group flex items-center justify-center" aria-label="Connect With Me">
+        <button
+          onClick={onSettingsClick}
+          className="group flex items-center justify-center"
+          aria-label="Open Settings"
+        >
           <div
             ref={settingsButtonRef}
             onMouseEnter={handleSettingsMouseEnter}

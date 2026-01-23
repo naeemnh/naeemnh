@@ -21,7 +21,7 @@ export const TerminalOutput = ({ output }: TerminalOutputProps) => {
   }, [output]);
 
   // Limit output to MAX_OUTPUT_LINES (performance optimization)
-  const displayOutput = output.length > MAX_OUTPUT_LINES 
+  const displayOutput = output.length > MAX_OUTPUT_LINES
     ? output.slice(-MAX_OUTPUT_LINES)
     : output;
 
@@ -36,7 +36,7 @@ export const TerminalOutput = ({ output }: TerminalOutputProps) => {
     >
       {displayOutput.length === 0 ? (
         <div className="text-slate-500 font-mono text-sm">
-          Type 'help' to see available commands.
+          Type &apos;help&apos; to see available commands.
         </div>
       ) : (
         <>
