@@ -6,7 +6,7 @@ import { useInterfaceMode } from "@/providers";
 export const Header = () => {
   const { isCLI } = useInterfaceMode();
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-slate-50/50 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-slate-50/50 dark:bg-background/50 backdrop-blur-sm">
       {/* Top Bar / Menu Bar - Fixed */}
       <a
         href="#"
@@ -14,7 +14,7 @@ export const Header = () => {
           e.preventDefault();
           scrollToSection("home");
         }}
-        className="text-slate-800 font-medium tracking-tight hover:text-slate-600 transition-colors"
+        className="text-slate-800 dark:text-foreground font-medium tracking-tight hover:text-slate-600 dark:hover:text-foreground/80 transition-colors"
       >
         Naeem Hussain
       </a>

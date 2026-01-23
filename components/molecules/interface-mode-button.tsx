@@ -33,11 +33,11 @@ export const InterfaceModeButton = ({ mode, onClick, className }: InterfaceModeB
       className={cn(
         "flex items-center justify-center",
         "w-9 h-9 rounded-lg",
-        "bg-white/80 backdrop-blur-sm",
+        "bg-white/80 dark:bg-background/50 backdrop-blur-sm",
         "border border-slate-200 dark:border-slate-700",
         "shadow-sm hover:shadow-md",
         "transition-all duration-200",
-        "hover:bg-white dark:hover:bg-slate-800",
+        "hover:bg-white dark:hover:bg-foreground/10",
         "focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2",
         "active:scale-95",
         className
@@ -46,9 +46,9 @@ export const InterfaceModeButton = ({ mode, onClick, className }: InterfaceModeB
       title={isGuiMode ? "Switch to CLI mode" : "Exit CLI mode"}
     >
       {isGuiMode ? (
-        <Terminal className="w-4 h-4 text-slate-700 dark:text-slate-300" />
+        <Terminal className="w-4 h-4 text-slate-700 dark:text-foreground/80" />
       ) : (
-        <Monitor className="w-4 h-4 text-slate-300 hover:text-slate-100" />
+        <Monitor className="w-4 h-4 text-slate-300 dark:text-foreground/80 hover:text-slate-100 dark:hover:text-foreground" />
       )}
     </button>
   );

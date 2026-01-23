@@ -95,8 +95,8 @@ export const WorkSection = () => {
     <div className="px-6 max-w-5xl mx-auto py-24">
       <ContentCard className="space-y-8">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">My Work</h2>
-          <p className="text-gray-600 dark:text-gray-400">Things I&apos;ve built that I&apos;m not embarrassed to show you</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-foreground/80 mb-3">My Work</h2>
+          <p className="text-gray-600 dark:text-foreground/40">Things I&apos;ve built that I&apos;m not embarrassed to show you</p>
         </div>
 
         {loading ? (
@@ -114,7 +114,7 @@ export const WorkSection = () => {
         )}
 
         {projects.length === 0 && (
-          <div className="py-12 text-center text-gray-500">
+          <div className="py-12 text-center text-gray-500 dark:text-foreground/50">
             <p>Projects coming soon...</p>
           </div>
         )}
