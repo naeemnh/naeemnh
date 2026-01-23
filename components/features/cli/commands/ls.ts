@@ -28,7 +28,12 @@ export const createLsCommand = (vfs: VirtualFileSystem): Command => ({
     // Format as columns (simple 2-column layout)
     const formatted = items.map(item => {
       const node = vfs.get(targetPath === "/" ? `/${item}` : `${targetPath}/${item}`);
-      const suffix = node?.type === "directory" ? "/" : "";
+      let suffix = "";
+      if (node?.type === "directory") {
+        suffix = "/";
+      } else if (node?.type === "executable") {
+        suffix = "*";
+      }
       return `  ${item}${suffix}`;
     }).join("\n");
 
