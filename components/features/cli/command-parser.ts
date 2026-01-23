@@ -54,6 +54,15 @@ export function parseCommand(input: string): ParsedCommand {
     return { command: "", args: [] };
   }
 
+  // Handle ./executable syntax - convert to run command
+  const firstPart = parts[0];
+  if (firstPart.startsWith("./")) {
+    return {
+      command: "run",
+      args: [firstPart.slice(2), ...parts.slice(1)],
+    };
+  }
+
   return {
     command: parts[0].toLowerCase(),
     args: parts.slice(1),
