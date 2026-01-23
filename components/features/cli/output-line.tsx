@@ -7,6 +7,7 @@ export interface OutputLine {
   type: OutputLineType;
   content: string | React.ReactNode;
   timestamp?: Date;
+  isTemporary?: boolean; // Marks prompt lines that should be removed when user provides input
 }
 
 interface OutputLineProps {

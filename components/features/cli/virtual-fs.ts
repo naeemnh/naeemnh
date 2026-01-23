@@ -1,15 +1,67 @@
+import { CommandResult } from "./command-registry";
+import { ABOUT_TEXT, EXPERIENCE, PROJECTS } from "@/constants/cli-data";
+import { Env } from "@/config/env";
+
 export interface VirtualFSNode {
-  type: "directory" | "file";
+  type: "directory" | "file" | "executable";
   name: string;
   path: string;
   content?: string | (() => Promise<string>);
   children?: VirtualFSNode[];
+  executable?: (args: string[], context: { currentDirectory: string }) => Promise<CommandResult>;
 }
 
 export class VirtualFileSystem {
   private root: VirtualFSNode;
 
   constructor() {
+    // Generate readme content
+    const homeReadme = `Welcome to my portfolio CLI!
+
+Available directories:
+  /home      - Home directory (you are here)
+  /about     - About me
+  /work      - Work experience and projects
+  /blog      - Blog posts
+  /contact   - Contact information and form
+
+Quick commands:
+  ls         - List files in current directory
+  cd <dir>   - Change directory
+  cat <file> - View file contents
+  help       - Show all available commands
+
+Type 'help' to see all available commands.`;
+
+    const aboutReadme = ABOUT_TEXT;
+
+    const projectsReadme = `Projects Overview
+
+${PROJECTS.map((p, i) => 
+  `${i + 1}. ${p.title}\n   ${p.description || "No description"}\n   Tech: ${p.techStack.join(", ")}\n   Link: ${p.link}`
+).join("\n\n")}
+
+Use 'projects' command to see more details.`;
+
+    const experienceReadme = `Work Experience
+
+${EXPERIENCE.map((exp) => 
+  `${exp.title} at ${exp.company}\n${exp.period}\n${exp.points?.map(p => `  • ${p}`).join("\n") || ""}`
+).join("\n\n")}
+
+Use 'experience' command to see more details.`;
+
+    const blogReadme = Env.BLOGS_ENABLED 
+      ? `Blog Posts
+
+Use 'blog' to list all blog posts.
+Use 'read <slug>' to read a specific post.
+
+Blog feature is enabled.`
+      : `Blog Posts
+
+Blog feature is currently disabled.`;
+
     this.root = {
       type: "directory",
       name: "/",
@@ -19,13 +71,27 @@ export class VirtualFileSystem {
           type: "directory",
           name: "home",
           path: "/home",
-          children: [],
+          children: [
+            {
+              type: "file",
+              name: "readme.md",
+              path: "/home/readme.md",
+              content: homeReadme,
+            },
+          ],
         },
         {
           type: "directory",
           name: "about",
           path: "/about",
-          children: [],
+          children: [
+            {
+              type: "file",
+              name: "readme.md",
+              path: "/about/readme.md",
+              content: aboutReadme,
+            },
+          ],
         },
         {
           type: "directory",
@@ -36,13 +102,27 @@ export class VirtualFileSystem {
               type: "directory",
               name: "projects",
               path: "/work/projects",
-              children: [],
+              children: [
+                {
+                  type: "file",
+                  name: "readme.md",
+                  path: "/work/projects/readme.md",
+                  content: projectsReadme,
+                },
+              ],
             },
             {
               type: "directory",
               name: "experience",
               path: "/work/experience",
-              children: [],
+              children: [
+                {
+                  type: "file",
+                  name: "readme.md",
+                  path: "/work/experience/readme.md",
+                  content: experienceReadme,
+                },
+              ],
             },
           ],
         },
@@ -50,13 +130,32 @@ export class VirtualFileSystem {
           type: "directory",
           name: "blog",
           path: "/blog",
-          children: [],
+          children: [
+            {
+              type: "file",
+              name: "readme.md",
+              path: "/blog/readme.md",
+              content: blogReadme,
+            },
+          ],
         },
         {
           type: "directory",
           name: "contact",
           path: "/contact",
-          children: [],
+          children: [
+            {
+              type: "executable",
+              name: "form.exe",
+              path: "/contact/form.exe",
+              executable: async (args, context) => {
+                // This will be handled by the form command handler
+                return {
+                  output: "Starting interactive form...\nUse 'form' command to fill out the contact form.",
+                };
+              },
+            },
+          ],
         },
       ],
     };

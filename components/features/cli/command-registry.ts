@@ -10,6 +10,7 @@ export type CommandResult = {
   output?: string | React.ReactNode;
   error?: string;
   exit?: boolean;
+  isTemporaryPrompt?: boolean; // If true, the last line of output should be marked as temporary
 };
 
 export interface Command {

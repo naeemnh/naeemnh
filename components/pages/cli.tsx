@@ -1,10 +1,11 @@
 "use client";
 
 import { useReducer, useCallback, useEffect, useRef } from "react";
-import { TerminalWindow, OutputLine, OutputLineType, CommandRegistry, parseCommand, VirtualFileSystem, initializeCommands } from "@/components/features/cli";
+import { TerminalWindow, OutputLine, OutputLineType, CommandRegistry, parseCommand, VirtualFileSystem, initializeCommands, getPrompt } from "@/components/features/cli";
 import { Env } from "@/config/env";
 import { SOCIAL_LINKS } from "@/constants/cli-data";
 import { useInterfaceMode } from "@/providers";
+import { isFormInProgress, getFormPrompt, resetFormState } from "@/components/features/cli/commands/form";
 
 interface CLIState {
   output: OutputLine[];
@@ -18,7 +19,8 @@ type CLIAction =
   | { type: "CLEAR_OUTPUT"; }
   | { type: "ADD_COMMAND"; payload: string; }
   | { type: "SET_DIRECTORY"; payload: string; }
-  | { type: "SET_PROCESSING"; payload: boolean; };
+  | { type: "SET_PROCESSING"; payload: boolean; }
+  | { type: "REMOVE_TEMPORARY"; };
 
 function cliReducer(state: CLIState, action: CLIAction): CLIState {
   switch (action.type) {
@@ -41,6 +43,8 @@ function cliReducer(state: CLIState, action: CLIAction): CLIState {
       return { ...state, currentDirectory: action.payload };
     case "SET_PROCESSING":
       return { ...state, isProcessing: action.payload };
+    case "REMOVE_TEMPORARY":
+      return { ...state, output: state.output.filter(line => !line.isTemporary) };
     default:
       return state;
   }
@@ -74,14 +78,23 @@ export const CLI = () => {
     }
   }, []);
 
-  const addOutputLine = useCallback((content: string | React.ReactNode, type: OutputLineType = "output") => {
-    const line: OutputLine = {
-      id: `output-${outputIdCounter.current++}`,
-      type,
-      content,
-      timestamp: new Date(),
-    };
-    dispatch({ type: "ADD_OUTPUT", payload: [line] });
+  const addOutputLine = useCallback((content: string | React.ReactNode, type: OutputLineType = "output", isTemporary: boolean = false) => {
+    // Split content by newlines to handle multi-line output
+    const contentStr = typeof content === "string" ? content : String(content);
+    const lines = contentStr.split("\n");
+    
+    const outputLines: OutputLine[] = lines.map((lineContent, index) => {
+      const isLastLine = index === lines.length - 1;
+      return {
+        id: `output-${outputIdCounter.current++}`,
+        type,
+        content: lineContent,
+        timestamp: new Date(),
+        isTemporary: isTemporary && isLastLine, // Only mark the last line as temporary
+      };
+    });
+    
+    dispatch({ type: "ADD_OUTPUT", payload: outputLines });
   }, []);
 
   const handleCommand = useCallback(async (input: string) => {
@@ -89,14 +102,72 @@ export const CLI = () => {
 
     const trimmed = input.trim();
 
+    // Parse command first
+    const parsed = parseCommand(trimmed);
+
+    // Check if form is in progress - if so, route input to form handler
+    // Allow exit and cancel commands to work even during form
+    if (isFormInProgress() && parsed.command !== "exit" && parsed.command !== "cancel") {
+      // Remove temporary prompt lines before processing input
+      dispatch({ type: "REMOVE_TEMPORARY" });
+
+      // Add command to history
+      dispatch({ type: "ADD_COMMAND", payload: trimmed });
+
+      // Get form command and process input
+      const registry = registryRef.current;
+      if (registry) {
+        const formCommand = registry.findByNameOrAlias("form");
+        if (formCommand) {
+          dispatch({ type: "SET_PROCESSING", payload: true });
+          try {
+            const context = {
+              currentDirectory: state.currentDirectory,
+              commandHistory: state.commandHistory,
+              setIsCLI,
+            };
+            const result = await formCommand.handler([trimmed], context);
+
+            if (result.error) {
+              addOutputLine(result.error, "error");
+              // Show prompt again if form is still in progress
+              if (isFormInProgress()) {
+                const prompt = getFormPrompt();
+                if (prompt) {
+                  addOutputLine(prompt, "output", true); // Mark as temporary
+                }
+              }
+            } else if (result.output !== undefined && result.output !== "") {
+              // Add output, marking last line as temporary if it's a prompt
+              addOutputLine(result.output, "output", result.isTemporaryPrompt || false);
+            }
+          } catch (error) {
+            addOutputLine(
+              `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+              "error"
+            );
+          } finally {
+            dispatch({ type: "SET_PROCESSING", payload: false });
+          }
+        }
+      }
+      return;
+    }
+
+    // Handle cancel command to exit form
+    if (parsed.command === "cancel" && isFormInProgress()) {
+      // Reset form state
+      resetFormState();
+      addOutputLine("Form cancelled.", "output");
+      dispatch({ type: "ADD_COMMAND", payload: trimmed });
+      return;
+    }
+
     // Add command to history
     dispatch({ type: "ADD_COMMAND", payload: trimmed });
 
-    // Add command line to output
-    addOutputLine(trimmed, "command");
-
-    // Parse command
-    const parsed = parseCommand(trimmed);
+    // Add command line to output with prompt prefix
+    addOutputLine(`${getPrompt(state.currentDirectory)}${trimmed}`, "command");
 
     if (!parsed.command) {
       return;
@@ -218,7 +289,7 @@ export const CLI = () => {
       if (result.error) {
         addOutputLine(result.error, "error");
       } else if (result.output !== undefined && result.output !== "") {
-        addOutputLine(result.output, "output");
+        addOutputLine(result.output, "output", result.isTemporaryPrompt || false);
       }
     } catch (error) {
       addOutputLine(
