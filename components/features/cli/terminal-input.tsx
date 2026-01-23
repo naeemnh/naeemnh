@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import { getPrompt } from "./prompt";
 
 interface TerminalInputProps {
   currentDirectory: string;
@@ -72,15 +73,10 @@ export const TerminalInput = ({
     }
   };
 
-  const getPrompt = () => {
-    const dir = currentDirectory === "/" ? "~" : currentDirectory;
-    return `user@portfolio:${dir}$ `;
-  };
-
   return (
     <div className="flex items-center px-4 py-3 bg-slate-900 border-t border-slate-700">
       <span className="text-slate-400 font-mono text-sm mr-2 select-none">
-        {getPrompt()}
+        {getPrompt(currentDirectory)}
       </span>
       <input
         ref={inputRef}

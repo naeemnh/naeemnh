@@ -1,7 +1,7 @@
 "use client";
 
 import { useReducer, useCallback, useEffect, useRef } from "react";
-import { TerminalWindow, OutputLine, OutputLineType, CommandRegistry, parseCommand, VirtualFileSystem, initializeCommands } from "@/components/features/cli";
+import { TerminalWindow, OutputLine, OutputLineType, CommandRegistry, parseCommand, VirtualFileSystem, initializeCommands, getPrompt } from "@/components/features/cli";
 import { Env } from "@/config/env";
 import { SOCIAL_LINKS } from "@/constants/cli-data";
 import { useInterfaceMode } from "@/providers";
@@ -166,8 +166,8 @@ export const CLI = () => {
     // Add command to history
     dispatch({ type: "ADD_COMMAND", payload: trimmed });
 
-    // Add command line to output
-    addOutputLine(trimmed, "command");
+    // Add command line to output with prompt prefix
+    addOutputLine(`${getPrompt(state.currentDirectory)}${trimmed}`, "command");
 
     if (!parsed.command) {
       return;
