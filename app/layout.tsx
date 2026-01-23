@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { ThemeProvider, InterfaceModeProvider } from "@/providers";
 import { METADATA } from "@/constants";
@@ -20,9 +21,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={true}>
-          <InterfaceModeProvider>
-            {children}
-          </InterfaceModeProvider>
+          <Suspense fallback={null}>
+            <InterfaceModeProvider>
+              {children}
+            </InterfaceModeProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>
