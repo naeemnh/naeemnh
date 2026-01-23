@@ -22,6 +22,8 @@ import { openCommand } from "./open";
 import { historyCommand } from "./history";
 import { blogCommand } from "./blog";
 import { readCommand } from "./read";
+import { createRunCommand } from "./run";
+import { createFormCommand } from "./form";
 import { Env } from "@/config/env";
 
 export function initializeCommands(vfs: VirtualFileSystem): CommandRegistry {
@@ -39,6 +41,8 @@ export function initializeCommands(vfs: VirtualFileSystem): CommandRegistry {
   registry.register(createCdCommand(vfs));
   registry.register(pwdCommand);
   registry.register(createCatCommand(vfs));
+  registry.register(createRunCommand(vfs));
+  registry.register(createFormCommand());
 
   // Information commands
   registry.register(whoamiCommand);
