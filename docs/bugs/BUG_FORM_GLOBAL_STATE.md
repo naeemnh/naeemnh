@@ -13,3 +13,5 @@ Architecture / State
 
 ## Severity / Priority
 Medium
+
+## User Context

@@ -13,3 +13,5 @@ UX
 
 ## Severity / Priority
 Medium
+
+## User Context

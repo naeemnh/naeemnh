@@ -13,3 +13,5 @@ UX / Navigation
 
 ## Severity / Priority
 Low
+
+## User Context

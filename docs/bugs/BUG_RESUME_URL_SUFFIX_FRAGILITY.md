@@ -13,3 +13,5 @@ Logic / Fragility
 
 ## Severity / Priority
 Low
+
+## User Context
