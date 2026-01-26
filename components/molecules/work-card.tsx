@@ -8,7 +8,12 @@ type WorkCardProps = {
 
 export const WorkCard: FC<WorkCardProps> = ({ project }) => {
   return (
-    <div className="group bg-white dark:bg-background rounded-2xl overflow-hidden border border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600 hover:shadow-xl transition-all duration-300 cursor-pointer">
+    <a 
+      href={project.link} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="group bg-white dark:bg-background rounded-2xl overflow-hidden border border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-600 hover:shadow-xl transition-all duration-300 cursor-pointer block"
+    >
       <div
         className={cn("aspect-video bg-linear-to-br relative overflow-hidden", {
           "from-blue-500 to-indigo-600": project.id % 4 === 0,
@@ -41,10 +46,10 @@ export const WorkCard: FC<WorkCardProps> = ({ project }) => {
             </span>
           ))}
         </div>
-        <a href={project.link} className="inline-flex items-center gap-2 text-slate-900 dark:text-foreground/80 font-medium group-hover:gap-3 transition-all">
+        <span className="inline-flex items-center gap-2 text-slate-900 dark:text-foreground/80 font-medium group-hover:gap-3 transition-all">
           View Project <span>→</span>
-        </a>
+        </span>
       </div>
-    </div>
+    </a>
   );
 };
