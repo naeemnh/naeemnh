@@ -20,9 +20,26 @@ export const TerminalInput = ({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Focus input on mount and when clicking in terminal area
+  // Focus input on mount and when clicking in terminal area (but not on output or interactive elements)
   useEffect(() => {
-    const handleClick = () => {
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      
+      // Don't focus if clicking on:
+      // 1. Links (allow navigation)
+      // 2. Buttons (allow button actions)
+      // 3. Inputs/textareas (allow editing other inputs)
+      // 4. Terminal output area (allow text selection and scrolling)
+      const isLink = target.tagName === 'A' || target.closest('a');
+      const isButton = target.tagName === 'BUTTON' || target.closest('button');
+      const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
+      const isInOutput = target.closest('.terminal-output') !== null;
+      
+      if (isLink || isButton || isInput || isInOutput) {
+        return;
+      }
+      
+      // Focus input for clicks on terminal window container (not output)
       inputRef.current?.focus();
     };
 
