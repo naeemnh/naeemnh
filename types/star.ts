@@ -20,7 +20,6 @@ export class Star {
     this.speed = random(this.orbitRadius) / 1000000;
     this.alpha = random(2, 10) / 10;
 
-    this.count++;
     stars[this.count] = this;
   }
 

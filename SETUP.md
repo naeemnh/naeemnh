@@ -88,23 +88,23 @@ Visit `http://localhost:3000` and check:
 
 **GUI**
 
-- [ ] Home loads; scroll through Hero, Work, Blog (if enabled), About, Contact
-- [ ] Theme toggle in Settings (light / dark / system)
-- [ ] Background animation toggle in Settings
-- [ ] Dock icons scroll to the correct sections
-- [ ] Contact form submits (with Resend configured)
-- [ ] Resume download works when `RESUME_URL` is set
-- [ ] If `CLI_ENABLED`: header shows terminal icon; click switches to CLI
+- [x] Home loads; scroll through Hero, Work, Blog (if enabled), About, Contact
+- [x] Theme toggle in Settings (light / dark / system)
+- [x] Background animation toggle in Settings
+- [x] Dock icons scroll to the correct sections
+- [x] Contact form submits (with Resend configured)
+- [x] Resume download works when `RESUME_URL` is set
+- [x] If `CLI_ENABLED`: header shows terminal icon; click switches to CLI
 
 **CLI** (`http://localhost:3000?mode=cli` or via header when `CLI_ENABLED`)
 
-- [ ] Welcome message; `help` lists commands
-- [ ] `ls`, `cd`, `pwd`, `cat` on the virtual FS
+- [x] Welcome message; `help` lists commands
+- [x] `ls`, `cd`, `pwd`, `cat` on the virtual FS
 - [ ] `form` (or `run form.exe`, `./contact/form.exe`): full flow and submit
-- [ ] `whoami`, `skills`, `experience`, `projects`, `contact`, `resume`, `resume download`
-- [ ] `github`, `linkedin`, `links`, `open <url>`
-- [ ] `exit` or monitor icon returns to GUI
-- [ ] `clear` clears output
+- [x] `whoami`, `skills`, `experience`, `projects`, `contact`, `resume`, `resume download`
+- [x] `github`, `linkedin`, `links`, `open <url>`
+- [x] `exit` or monitor icon returns to GUI
+- [x] `clear` clears output
 
 **Other**
 
