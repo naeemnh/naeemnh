@@ -70,10 +70,9 @@ export const CanvasAnimation = (): React.JSX.Element | null => {
 
       const maxStars = 1000;
       const stars: Star[] = [];
-      const count = 0;
 
       for (let i = 0; i < maxStars; i++) {
-        stars.push(new Star(w, h, count, stars, maxStars));
+        stars.push(new Star(w, h, i, stars, maxStars));
       }
 
       function animation(): void {
@@ -86,8 +85,10 @@ export const CanvasAnimation = (): React.JSX.Element | null => {
         // ctx.globalCompositeOperation = 'darken';
         ctx.globalCompositeOperation = isDark ? "lighter" : "darken";
 
-        for (let i = 1, l = stars.length; i < l; i++) {
-          stars[i].draw(ctx, canvas2);
+        for (let i = 0, l = stars.length; i < l; i++) {
+          if (stars[i]) {
+            stars[i].draw(ctx, canvas2);
+          }
         }
 
         animationFrameRef.current = requestAnimationFrame(animation);
@@ -99,6 +100,14 @@ export const CanvasAnimation = (): React.JSX.Element | null => {
   );
 
   useEffect(() => {
+    if (!isAnimationEnabled) {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      return;
+    }
+
     if (typeof window !== "undefined") {
       window.addEventListener("resize", handleWindowResize);
     }
@@ -108,12 +117,13 @@ export const CanvasAnimation = (): React.JSX.Element | null => {
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", handleWindowResize);
       }
     };
-  }, [animateCanvas, handleWindowResize, windowHeight, windowWidth]);
+  }, [animateCanvas, handleWindowResize, windowHeight, windowWidth, isAnimationEnabled]);
 
   // Don't render if animation is disabled
   if (!isAnimationEnabled) {
