@@ -26,9 +26,9 @@ export const openCommand: Command = {
           error: "Resume URL not configured",
         };
       }
-    } else if (input === "github" || input === "gh") {
+    } else if (input.toLowerCase() === "github" || input.toLowerCase() === "gh") {
       url = SOCIAL_LINKS.github;
-    } else if (input === "linkedin" || input === "li") {
+    } else if (input.toLowerCase() === "linkedin" || input.toLowerCase() === "li") {
       url = SOCIAL_LINKS.linkedin;
     } else {
       // Check if it's a project name
