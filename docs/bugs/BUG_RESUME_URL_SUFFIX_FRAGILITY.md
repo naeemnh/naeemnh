@@ -15,3 +15,7 @@ Logic / Fragility
 Low
 
 ## User Context
+The resume url is specifically a dropbox url
+This allows a 'dl' query param where 1 means the link is downloadable, and '0' means it is simply viewable.
+the url in .env had &dl= at the end which i have removed.
+While building, this check should run. build should fail if it is not a dropbox link
