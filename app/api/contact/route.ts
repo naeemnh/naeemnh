@@ -102,14 +102,20 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, email, subject, message } = body;
 
-    // Validate input
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    // Validate input - enforce string type and non-empty after trim
+    // Check all fields are strings
+    if (typeof name !== "string" || typeof email !== "string" || typeof subject !== "string" || typeof message !== "string") {
+      return NextResponse.json({ error: "All fields must be strings" }, { status: 400 });
+    }
+    
+    // Check all fields are non-empty after trimming whitespace
+    if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
+      return NextResponse.json({ error: "All fields are required and cannot be empty" }, { status: 400 });
     }
 
-    // Validate email format
+    // Validate email format (email is already confirmed to be a non-empty string at this point)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email.trim())) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
     }
 
@@ -123,13 +129,19 @@ export async function POST(request: Request) {
     const recipientEmail = Env.CONTACT_FORM_RECIPIENT_EMAIL || "me@naeemnh.com";
     const senderEmail = Env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 
-    // Send email notification
+    // Send email notification (all fields are validated as non-empty strings at this point)
+    // Trim values before using them to ensure no leading/trailing whitespace
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedSubject = subject.trim();
+    const trimmedMessage = message.trim();
+    
     const emailResult = await resend.emails.send({
       from: senderEmail,
       to: recipientEmail,
-      replyTo: email, // Set reply-to to user's email for easy replies
-      subject: `Contact Form: ${sanitizeEmailSubject(subject)}`,
-      html: createEmailTemplate(name, email, subject, message),
+      replyTo: trimmedEmail, // Set reply-to to user's email for easy replies
+      subject: `Contact Form: ${sanitizeEmailSubject(trimmedSubject)}`,
+      html: createEmailTemplate(trimmedName, trimmedEmail, trimmedSubject, trimmedMessage),
     });
 
     // Check if email was sent successfully
