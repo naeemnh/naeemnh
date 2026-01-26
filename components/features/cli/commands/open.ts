@@ -1,6 +1,7 @@
 import { Command } from "../command-registry";
 import { SOCIAL_LINKS, PROJECTS } from "@/constants/cli-data";
 import { Env } from "@/config/env";
+import { getResumeViewUrl } from "@/lib/resume-url";
 
 export const openCommand: Command = {
   name: "open",
@@ -19,14 +20,7 @@ export const openCommand: Command = {
     // Check if it's "resume"
     if (input.toLowerCase() === "resume") {
       if (Env.RESUME_URL) {
-        // For open, ensure URL ends with "0"
-        // If URL ends with 0 or 1, replace it with "0"
-        // Otherwise, append "0"
-        if (Env.RESUME_URL.endsWith("0") || Env.RESUME_URL.endsWith("1")) {
-          url = Env.RESUME_URL.slice(0, -1) + "0";
-        } else {
-          url = Env.RESUME_URL + "0";
-        }
+        url = getResumeViewUrl();
       } else {
         return {
           error: "Resume URL not configured",
