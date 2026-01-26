@@ -15,3 +15,4 @@ Logic
 High
 
 ## User Context
+Addtionally, after the animation is disabled/stopped from the settings, enabling it doesn't restart the animation.
