@@ -1,194 +1,272 @@
-# Personal Portfolio Website
+# Naeem Hussain — Personal Portfolio
 
-A modern, device-inspired portfolio website built with Next.js, TypeScript, and Tailwind CSS. The site features a unique desktop/mobile interface design where each page functions as a separate "app" within the device interface.
+A modern portfolio site with **two interfaces**: a graphical single-page UI and a **CLI/terminal mode**. Built with Next.js, TypeScript, and Tailwind CSS. The home page switches between GUI and CLI via `?mode=cli`; both share the same data and contact/blog/resume flows.
+
+---
 
 ## Features
 
-- 🖥️ **Device Interface**: Desktop and mobile device-like interfaces
-- 📱 **Responsive Design**: Optimized for all screen sizes
-- 📝 **Blog**: Markdown-based blog with reading time estimates
-- 💼 **Portfolio**: Showcase your projects with cards
-- 📧 **Contact Form**: Integrated contact form with email support
-- ⚡ **Performance**: Optimized for 90+ Lighthouse scores
-- 🔍 **SEO**: Complete SEO setup with sitemap and robots.txt
+### Dual interface (GUI + CLI)
 
-## Tech Stack
+- **GUI mode (default)**  
+  Single-page layout with fixed header, bottom dock, and scrollable sections. Access CLI via the terminal icon in the header when `CLI_ENABLED` is set.
 
-- **Framework**: Next.js 16
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **Animations**: GSAP
-- **Theme**: next-themes
-- **Markdown**: react-markdown with remark-gfm
+- **CLI mode** (`/?mode=cli`)  
+  Terminal-style UI with a virtual filesystem, command history, and 25+ commands. Use `exit` or the monitor icon to return to GUI. CLI mode is shareable via the `mode=cli` URL.
 
-## Getting Started
+### GUI features
+
+| Feature | Description |
+|--------|-------------|
+| **Header** | Site name (scroll to home), CLI toggle when `CLI_ENABLED` is true |
+| **Dock** | Fixed bottom bar: Home, Work, Blog (if enabled), About, Contact, divider, Settings. Section icons scroll to the corresponding section. |
+| **Settings panel** | Theme (Light / Dark / System), Background animation on/off. Persists animation preference in `localStorage`. |
+| **Canvas animation** | Optional starfield background (light/dark aware). Toggle in Settings. |
+| **Hero** | Tagline, CTAs (View My Work, Get In Touch), “Open to opportunities” status |
+| **Work** | Project cards (from `constants/cli-data` or local overrides) |
+| **Blog** | Blog cards linking to `/blog/[slug]`. Shown only when `BLOGS_ENABLED` is true. |
+| **About** | Bio, skills, experience timeline |
+| **Contact** | Form (Resend), LinkedIn/GitHub links, resume download, availability |
+
+### CLI features
+
+| Feature | Description |
+|--------|-------------|
+| **Virtual filesystem** | Directories: `/home`, `/about`, `/work/projects`, `/work/experience`, `/blog`, `/contact`. `form.exe` under `/contact` runs the interactive contact form. |
+| **Command parsing** | Quoted args, `./executable` → `run` command |
+| **Output** | Capped at 1000 lines for performance. `clear` / `cls` to clear. |
+| **Form in CLI** | `form` or `run form.exe` / `./contact/form.exe` for an interactive contact flow (name → email → subject → message → submit via `/api/contact`). `cancel` exits the form. |
+
+#### CLI commands
+
+| Command | Aliases | Description |
+|---------|---------|-------------|
+| `help` | `?` | List commands or `help <cmd>` for usage |
+| `clear` | `cls` | Clear terminal output |
+| `exit` | `quit`, `q` | Leave CLI, back to GUI |
+| `echo` | — | Print arguments |
+| `date` | `time` | Current date/time |
+| `ls` | `list`, `dir` | List VFS paths |
+| `cd` | `navigate` | Change directory (`~`, `..`, `../x`) |
+| `pwd` | — | Print current directory |
+| `cat` | `view`, `read`, `show` | Show file content |
+| `run` | — | Run VFS executables (e.g. `run form.exe`, `./contact/form.exe`) |
+| `form` | — | Interactive contact form in CLI |
+| `whoami` | — | Name and tagline |
+| `skills` | `tech` | Skills/technologies |
+| `experience` | `exp`, `work` | Work history; `experience <company>` for one |
+| `projects` | `portfolio` | Projects; `projects <name>` for one |
+| `contact` | — | Contact info |
+| `resume` | `cv` | Resume info; `resume download` opens download URL |
+| `github` | `gh` | Open GitHub |
+| `linkedin` | `li` | Open LinkedIn |
+| `links` | `social` | List social links |
+| `open` | — | `open <url>` or `open resume` etc. Open in new tab |
+| `history` | — | Command history |
+| `blog` | — | List posts (when `BLOGS_ENABLED`); `blog <slug>` hint |
+| `read` | — | `read <slug>` for a post (when `BLOGS_ENABLED`) |
+
+### Pages and routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | Home: GUI or CLI based on `?mode=cli` |
+| `/blog` | Blog list in an app window |
+| `/blog/[slug]` | Blog post (react-markdown, remark-gfm) |
+| `/portfolio` | Standalone portfolio (app window, own project data) |
+
+### API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/contact` | POST | Contact form. Validates `name`, `email`, `subject`, `message`; sends via Resend. HTML template, reply-to set to sender. XSS/header sanitization. |
+| `/api/og` | GET | `?url=` — server-side Open Graph fetch (title, description, image, url, siteName). Used by `lib/og-server` / `lib/og-utils`. |
+
+### SEO and meta
+
+- Root metadata (title, description, keywords, authors, openGraph, twitter) from `constants/metadata`
+- `app/robots.ts`: allow `/`, disallow `/api/`, sitemap `https://naeemnh.com/sitemap.xml`
+- `app/sitemap.ts`: base URL
+
+### Theming and accessibility
+
+- **next-themes**: light / dark / system
+- **Animation**: starfield on/off in Settings; preference in `localStorage`
+
+---
+
+## Tech stack
+
+| Category | Choice |
+|----------|--------|
+| Framework | Next.js 16 |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Animations | GSAP, `@gsap/react` |
+| Theme | next-themes |
+| Markdown | react-markdown, remark-gfm |
+| Email | Resend |
+| Other | clsx, tailwind-merge, date-fns, gray-matter, reading-time, react-intersection-observer, open-graph-scraper, lucide-react |
+
+---
+
+## Getting started
 
 ### Prerequisites
 
 - Node.js 18+
 - npm or yarn
 
-### Installation
-
-1. Clone the repository:
+### Install
 
 ```bash
 git clone <your-repo-url>
-cd personal-website
-```
-
-2. Install dependencies:
-
-```bash
+cd naeemnh
 npm install
 ```
 
-3. Set up environment variables:
+### Environment variables
 
-```bash
-cp .env.example .env.local
-```
+Create `.env.local` and set:
 
-Edit `.env.local` and add your email configuration (see Email Setup below).
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `RESEND_API_KEY` | For contact | Resend API key |
+| `CONTACT_FORM_RECIPIENT_EMAIL` | For contact | Where form submissions are sent |
+| `RESEND_FROM_EMAIL` | For contact | Sender (e.g. `onboarding@resend.dev` for testing) |
+| `RESUME_URL` or `NEXT_PUBLIC_RESUME_URL` | Optional | Resume PDF URL (direct download). `resume download` and GUI use it. |
+| `CLI_ENABLED` or `NEXT_PUBLIC_CLI_ENABLED` | Optional | `"true"` to show CLI toggle and enable CLI mode |
+| `BLOGS_ENABLED` or `NEXT_PUBLIC_BLOGS_ENABLED` | Optional | `"true"` to show Blog in GUI dock/section and `blog`/`read` in CLI |
 
-4. Run the development server:
+### Run
 
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000). For CLI: [http://localhost:3000?mode=cli](http://localhost:3000?mode=cli).
 
-## Email Setup
+---
 
-The contact form uses Resend for email notifications. Follow these steps:
+## Email (contact form)
 
-### Resend Setup
+Contact (GUI and CLI `form`) uses **Resend**.
 
-1. Sign up at [resend.com](https://resend.com) (free tier: 3,000 emails/month)
-2. Get your API key from the Resend dashboard
-3. Add to `.env.local`:
+1. Sign up at [resend.com](https://resend.com).
+2. Create an API key and set `RESEND_API_KEY`.
+3. Set `CONTACT_FORM_RECIPIENT_EMAIL` and `RESEND_FROM_EMAIL` (use `onboarding@resend.dev` for testing; verify your domain for production).
 
-```bash
-RESEND_API_KEY=re_your_api_key_here
-CONTACT_FORM_RECIPIENT_EMAIL=your-email@zoho.com
-RESEND_FROM_EMAIL=onboarding@resend.dev
-```
+Reply-to is the submitter’s email so you can reply from your client.
 
-**Note:**
-
-- `RESEND_FROM_EMAIL` can use `onboarding@resend.dev` for testing, but for production you should verify your domain in Resend
-- `CONTACT_FORM_RECIPIENT_EMAIL` is where you'll receive contact form submissions (your Zoho email)
-- The form automatically sets the reply-to header to the user's email, so you can reply directly
-
-### Option 2: Zoho SMTP
-
-1. Create an app password in your Zoho account
-2. Add to `.env.local`:
-
-```
-ZOHO_EMAIL=your-email@zoho.com
-ZOHO_PASSWORD=your_app_password
-ZOHO_HOST=smtp.zoho.com
-ZOHO_PORT=587
-```
-
-3. Install nodemailer: `npm install nodemailer`
-4. Update `app/api/contact/route.ts` to use nodemailer.
-
-### Option 3: SendGrid
-
-1. Sign up at [sendgrid.com](https://sendgrid.com)
-2. Get your API key
-3. Add to `.env.local`:
-
-```
-SENDGRID_API_KEY=your_api_key_here
-```
+---
 
 ## Customization
 
-### Adding Portfolio Projects
+### Core data (GUI + CLI)
 
-Edit `app/portfolio/page.tsx` and update the `projects` array with your actual projects.
+Edit **`constants/cli-data.ts`**:
 
-### Adding Blog Posts
+- `PERSONAL_INFO` — name, tagline, subtitle, availability
+- `SKILLS` — skills list
+- `EXPERIENCE` — work history
+- `PROJECTS` — projects (Work section and CLI)
+- `SOCIAL_LINKS` — GitHub, LinkedIn
+- `ABOUT_TEXT` — about text used in CLI and About section
 
-1. Create markdown files in `content/blog/` (create this directory)
-2. Update `app/blog/[slug]/page.tsx` to read from markdown files
-3. Use `gray-matter` to parse frontmatter
+### Blog
 
-### Updating About Section
+- **GUI `BlogsSection`**: `components/organisms/blogs-section.tsx` — edit the `blogPosts` array or hook up to CMS/markdown.
+- **`/blog` and `/blog/[slug]`**: `app/blog/page.tsx`, `app/blog/[slug]/page.tsx` — replace placeholder data or wire to `content/blog` + gray-matter.
 
-Edit `app/about/page.tsx` and update the `skills` and `experience` arrays.
+### Portfolio page
 
-### Adding Your Wallpaper
+`app/portfolio/page.tsx` uses its own `projects` array. Update there or refactor to use `constants/cli-data`.
 
-1. Add your wallpaper image to `public/wallpaper.jpg`
-2. Update the wallpaper div in `app/page.tsx` to use your image
+### Metadata and SEO
 
-### Updating Social Links
+- **`constants/metadata.ts`** — site-wide metadata.
+- **`app/sitemap.ts`** — add `/blog`, `/portfolio`, and dynamic blog slugs as needed.
+- **`app/robots.ts`** — adjust rules if you add more routes.
 
-Edit `app/contact/page.tsx` and update the LinkedIn and GitHub URLs.
+### Resume
 
-### Adding Resume
+- Set `RESUME_URL` (or `NEXT_PUBLIC_RESUME_URL`) to the PDF URL.  
+- `resume download` in CLI and the Contact section “Download PDF” use it. The implementation may append `1` for a direct-download variant; see `components/pages/cli.tsx` and `Env.RESUME_URL`.
 
-1. Add your resume PDF to `public/resume.pdf`
-2. The download link in the contact page will automatically work
+### Wallpaper / assets
 
-## Project Structure
+- Add images under `public/` (e.g. `wallpaper.jpg`, `placeholder-project.jpg`) and reference them in components.
+
+---
+
+## Project structure
 
 ```
 ├── app/
-│   ├── about/          # About page
-│   ├── blog/           # Blog pages
-│   ├── contact/        # Contact page
-│   ├── portfolio/      # Portfolio page
-│   ├── api/            # API routes
-│   ├── layout.tsx      # Root layout
-│   ├── page.tsx        # Home page
-│   ├── globals.css     # Global styles
-│   ├── sitemap.ts      # SEO sitemap
-│   └── robots.ts       # SEO robots.txt
-├── components/         # React components
-├── public/             # Static assets
-└── docs/               # Documentation
+│   ├── api/
+│   │   ├── contact/route.ts    # Contact form (Resend)
+│   │   └── og/route.ts        # Open Graph proxy
+│   ├── blog/
+│   │   ├── [slug]/page.tsx
+│   │   └── page.tsx
+│   ├── portfolio/page.tsx
+│   ├── layout.tsx
+│   ├── page.tsx               # Home: CLI or GUI
+│   ├── not-found.tsx
+│   ├── globals.css
+│   ├── robots.ts
+│   └── sitemap.ts
+├── components/
+│   ├── atoms/                 # Section, ContentCard, AppIcon
+│   ├── molecules/             # AppWindow, BlogCard, WorkCard, Clock, InterfaceModeButton
+│   ├── organisms/             # Header, Dock, SettingsPanel, CanvasAnimation,
+│   │                           # HeroSection, WorkSection, BlogsSection, AboutSection, ContactSection
+│   ├── features/cli/          # TerminalWindow, TerminalInput, TerminalOutput, commands, VFS, etc.
+│   ├── icons/
+│   └── pages/                 # CLI, GUI
+├── config/env.ts              # Env flags (RESUME_URL, CLI_ENABLED, BLOGS_ENABLED, Resend)
+├── constants/
+│   ├── cli-data.ts            # PERSONAL_INFO, SKILLS, EXPERIENCE, PROJECTS, SOCIAL_LINKS, ABOUT_TEXT
+│   ├── metadata.ts
+│   └── index.ts
+├── hooks/                     # useMediaQuery, useIsDesktop, useIsMobile, useWindowSize, useOpenGraph
+├── lib/                       # utils, og-server, og-utils
+├── providers/                 # ThemeProvider, InterfaceModeProvider, AnimationPreferencesProvider
+├── types/
+└── docs/                      # Feature notes, CLI commands, etc.
 ```
 
-## Deployment
+---
 
-### Vercel (Recommended)
+## Scripts
 
-1. Push your code to GitHub
-2. Import your repository in Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy!
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run start` | Run production build |
+| `npm run lint` | ESLint |
 
-The site will be available at `https://naeemnh.com` (configure your domain in Vercel).
+---
 
-## Performance
+## Deployment (e.g. Vercel)
 
-- Target Lighthouse Score: 90+
-- Image optimization with Next.js Image component
-- Code splitting and lazy loading
-- Optimized fonts and CSS
+1. Push to GitHub and import in Vercel.
+2. Add the env vars above in the Vercel project.
+3. Deploy. Set your domain (e.g. `naeemnh.com`) in Vercel.
 
-## SEO
+---
 
-- Meta tags for all pages
-- Open Graph tags
-- Structured data (JSON-LD)
-- Sitemap.xml
-- robots.txt
+## Future ideas
 
-## Future Enhancements
+- Cmd+K search
+- RSS for the blog
+- Project tags/filtering
+- Career timeline view
+- Markdown-based blog in `content/blog` with gray-matter + `reading-time`
+- More sitemap entries for `/blog`, `/portfolio`, `/blog/[slug]`
 
-- [ ] Cmd+K search functionality
-- [ ] CLI/terminal UI version
-- [ ] RSS feed for blog
-- [ ] Project filtering/tagging
-- [ ] Career timeline visualization
-- [ ] Keyboard navigation (post-launch priority)
+---
 
 ## License
 
@@ -196,4 +274,4 @@ MIT
 
 ## Author
 
-Naeem - [naeemnh.com](https://naeemnh.com)
+Naeem Hussain — [naeemnh.com](https://naeemnh.com)

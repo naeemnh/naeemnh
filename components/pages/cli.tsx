@@ -3,6 +3,7 @@
 import { useReducer, useCallback, useEffect, useRef } from "react";
 import { TerminalWindow, OutputLine, OutputLineType, CommandRegistry, parseCommand, VirtualFileSystem, initializeCommands, getPrompt } from "@/components/features/cli";
 import { Env } from "@/config/env";
+import { getResumeDownloadUrl } from "@/lib/resume-url";
 import { SOCIAL_LINKS } from "@/constants/cli-data";
 import { useInterfaceMode } from "@/providers";
 import { isFormInProgress, getFormPrompt, resetFormState } from "@/components/features/cli/commands/form";
@@ -219,23 +220,17 @@ export const CLI = () => {
 
       // Handle resume download - must be before other result handling
       if (parsed.command === "resume" && parsed.args[0] === "download" && Env.RESUME_URL) {
-        // Extract URL from command output (which has the modified URL with "1")
+        // Extract URL from command output, or fallback to getResumeDownloadUrl()
         let downloadUrl: string;
         if (result.output && typeof result.output === "string") {
           const urlMatch = result.output.match(/Downloading resume: (.+)/);
           if (urlMatch) {
             downloadUrl = urlMatch[1];
           } else {
-            // Fallback: construct URL with "1" suffix
-            downloadUrl = Env.RESUME_URL.endsWith("0") || Env.RESUME_URL.endsWith("1")
-              ? Env.RESUME_URL.slice(0, -1) + "1"
-              : Env.RESUME_URL + "1";
+            downloadUrl = getResumeDownloadUrl();
           }
         } else {
-          // Fallback: construct URL with "1" suffix
-          downloadUrl = Env.RESUME_URL.endsWith("0") || Env.RESUME_URL.endsWith("1")
-            ? Env.RESUME_URL.slice(0, -1) + "1"
-            : Env.RESUME_URL + "1";
+          downloadUrl = getResumeDownloadUrl();
         }
         window.open(downloadUrl, "_blank", "noopener,noreferrer");
         addOutputLine(`Downloading resume...`, "output");

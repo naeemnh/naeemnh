@@ -38,7 +38,7 @@ const experience: TExperience[] = [
     ],
   },
   {
-    title: "Tech And Digial Associate",
+    title: "Tech And Digital Associate",
     company: "Mehan Limited",
     period: "Dec. 2021 - Dec. 2023",
     points: [
@@ -66,10 +66,10 @@ export const AboutSection = () => {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-foreground/80 mb-3">About Me</h2>
           <p className="text-gray-600 dark:text-foreground/60">
-            I&apos;m a full stack engineer who genuinely enjoys the whole stack — yes, even debugging CSS. hire.
+            I&apos;m a full stack engineer who genuinely enjoys the whole stack — yes, even debugging CSS.
           </p>
           <p className="text-gray-600 dark:text-foreground/60">
-            I learn fast, ship faster, and care about writing code that the next developer (often future me) wont curse at. I&apos;m drawn to teams building
+            I learn fast, ship faster, and care about writing code that the next developer (often future me) won&apos;t curse at. I&apos;m drawn to teams building
             something meaningful, where quality matters and &quot;it works on my machine&quot; isn&apos;t an acceptable answer.
           </p>
         </div>
