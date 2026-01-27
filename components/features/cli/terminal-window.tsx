@@ -21,7 +21,7 @@ export const TerminalWindow = ({
   onExit,
 }: TerminalWindowProps) => {
   return (
-    <div className="h-screen flex flex-col bg-slate-950 text-slate-100 font-mono overflow-hidden relative">
+    <div className="h-full flex flex-col bg-slate-950 text-slate-100 font-mono overflow-hidden relative">
       {/* Exit Button - Top Right */}
       {onExit && (
         <div className="absolute top-4 right-4 z-10">
