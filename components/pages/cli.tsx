@@ -83,7 +83,7 @@ export const CLI = () => {
     // Split content by newlines to handle multi-line output
     const contentStr = typeof content === "string" ? content : String(content);
     const lines = contentStr.split("\n");
-    
+
     const outputLines: OutputLine[] = lines.map((lineContent, index) => {
       const isLastLine = index === lines.length - 1;
       return {
@@ -94,7 +94,7 @@ export const CLI = () => {
         isTemporary: isTemporary && isLastLine, // Only mark the last line as temporary
       };
     });
-    
+
     dispatch({ type: "ADD_OUTPUT", payload: outputLines });
   }, []);
 
@@ -301,7 +301,7 @@ export const CLI = () => {
   }, [setIsCLI]);
 
   return (
-    <div className="h-screen">
+    <div className="h-dvh">
       <TerminalWindow
         output={state.output}
         currentDirectory={state.currentDirectory}
