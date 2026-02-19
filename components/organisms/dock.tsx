@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { BookOpen, Mail, Briefcase, User, Settings, HomeIcon } from "lucide-react";
+import { BookOpen, Mail, Briefcase, User, Settings, HomeIcon, MessageCircle } from "lucide-react";
 
 import { useIsDesktop } from "@/hooks";
 import { Env } from "@/config/env";
@@ -93,6 +93,7 @@ export const Dock = ({ onSettingsClick }: DockProps) => {
         {Env.BLOGS_ENABLED && <AppIcon name="" sectionId="blog" icon={<BookOpen className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />}
         <AppIcon name="" sectionId="about" icon={<User className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
         <AppIcon name="" sectionId="contact" icon={<Mail className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
+        <AppIcon name="Chat" href="/chat" icon={<MessageCircle className="h-6 w-6 text-black dark:text-white" />} color="bg-transparent" />
 
         <div className="mx-2 h-8 w-px bg-gray-300 dark:bg-gray-600" />
 
