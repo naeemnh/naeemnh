@@ -1,0 +1,12 @@
+reviews:
+  auto_reviews:
+    # only review changes that are not already reviewed
+    only_unreviewed: true
+    # only review changes that are not already approved
+    only_approved: false
+    # only review changes that are not already rejected
+    only_rejected: false
+    # only review changes that are not already merged
+    only_merged: false
+    # only review changes that are not already closed
+    only_closed: false
