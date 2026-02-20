@@ -1,7 +1,30 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChatPanel } from "@/components/features/chat";
 import { Section } from "@/components/atoms";
 import { ArrowLeft } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Chat with N.AI.M | Naeem Hussain",
+  description:
+    "Chat with a virtual version of Naeem Hussain about experience, projects, skills, and how to get in touch.",
+  alternates: {
+    canonical: "/chat",
+  },
+  openGraph: {
+    title: "Chat with N.AI.M | Naeem Hussain",
+    description:
+      "Chat with a virtual version of Naeem Hussain about experience, projects, skills, and how to get in touch.",
+    type: "website",
+    url: "/chat",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Chat with N.AI.M | Naeem Hussain",
+    description:
+      "Chat with a virtual version of Naeem Hussain about experience, projects, skills, and how to get in touch.",
+  },
+};
 
 export default function ChatPage() {
   return (
