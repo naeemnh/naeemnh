@@ -18,7 +18,7 @@ export default function ChatPage() {
         <span className="font-medium text-slate-900 dark:text-foreground">Chat</span>
       </header>
 
-      <Section id="chat" className="px-6 pt-12 pb-24">
+      <Section id="chat" className="md:px-6 md:pt-12 md:pb-24">
         <ChatPanel />
       </Section>
     </main>

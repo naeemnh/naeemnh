@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { ContentCard } from "@/components/atoms";
 import { cn } from "@/lib/utils";
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
+type ChatMessage = { role: "user" | "assistant"; content: string; };
 
 export function ChatPanel() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -53,11 +53,11 @@ export function ChatPanel() {
   };
 
   return (
-    <ContentCard className="flex flex-col h-[70vh] min-h-[320px] max-w-2xl mx-auto">
+    <ContentCard className="rounded-none md:rounded-2xl flex flex-col h-[calc(100vh-57px)] md:h-[70vh] min-h-[320px] max-w-2xl mx-auto">
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-foreground/80">Ask about Naeem</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-foreground/80">Chat with N.AI.M</h2>
         <p className="text-sm text-gray-600 dark:text-foreground/60 mt-1">
-          Questions about his experience, projects, skills, or how to get in touch.
+          Chat with a virtual me about my experience, projects, skills, or how to get in touch.
         </p>
       </div>
 
@@ -67,7 +67,7 @@ export function ChatPanel() {
       >
         {messages.length === 0 && (
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Send a message to start. Try &quot;What does Naeem do?&quot; or &quot;What are his skills?&quot;
+            Send a message to start. Try &quot;Tell me about your background&quot; or &quot;What projects are you most proud of?&quot;
           </p>
         )}
         {messages.map((m, i) => (
