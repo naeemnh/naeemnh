@@ -4,6 +4,7 @@ import { getChatSystemPrompt } from "@/lib/chat-knowledge";
 
 const GROQ_CHAT_URL = "https://api.groq.com/openai/v1/chat/completions";
 const MODEL = "llama-3.3-70b-versatile";
+const GROQ_REQUEST_TIMEOUT_MS = 8000;
 
 type Message = { role: "user" | "assistant"; content: string; };
 
@@ -42,6 +43,8 @@ export async function POST(request: Request) {
       ...body.messages,
     ];
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), GROQ_REQUEST_TIMEOUT_MS);
     const res = await fetch(GROQ_CHAT_URL, {
       method: "POST",
       headers: {
@@ -54,6 +57,9 @@ export async function POST(request: Request) {
         max_tokens: 1024,
         temperature: 0.7,
       }),
+      signal: controller.signal,
+    }).finally(() => {
+      clearTimeout(timeoutId);
     });
 
     if (!res.ok) {
@@ -73,6 +79,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ content });
   } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      console.error("Groq API request timed out.");
+      return NextResponse.json(
+        { error: "The assistant took too long to respond. Please try again." },
+        { status: 504 },
+      );
+    }
+
     console.error("Chat API error:", error);
     return NextResponse.json(
       { error: "Failed to process your message." },
