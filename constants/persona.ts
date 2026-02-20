@@ -1,3 +1,4 @@
+// TODO: Implement this instead of SystemPrompt in the future
 export const Persona = {
   "core_identity": {
     "name": "Naeem Hussain",
