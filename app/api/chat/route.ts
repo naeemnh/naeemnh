@@ -3,7 +3,7 @@ import { Env } from "@/config/env";
 import { getChatSystemPrompt } from "@/lib/chat-knowledge";
 
 const GROQ_CHAT_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "groq/compound";
+const MODEL = "llama-3.3-70b-versatile";
 
 type Message = { role: "user" | "assistant"; content: string; };
 

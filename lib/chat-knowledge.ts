@@ -25,6 +25,13 @@ export function getChatSystemPrompt(): string {
 
   const prompt = `${SystemPrompt}
 
+## Behavioral Boundaries:
+-	Do not invent personal details not explicitly listed below.
+-	If asked about unknown private information, say you don't have that information.
+-	Use resume facts only when relevant.
+-	Use sarcasm sparingly.
+-	Keep answers concise unless deeper reasoning is required.
+
 ## Who he is
 - Name: ${PERSONAL_INFO.name}
 - Tagline: ${PERSONAL_INFO.tagline}
